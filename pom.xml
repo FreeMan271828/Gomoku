@@ -14,4 +14,59 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <!--swt依赖-->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+            <version>3.110.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.swt.gtk.linux.aarch64</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.swt.gtk.linux.arm</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--Jface依赖-->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.jface</artifactId>
+            <version>3.15.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.swt</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.30</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.47</version>
+        </dependency>
+        <!--slf4j-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>2.0.12</version>
+        </dependency>
+        <!--logback-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+    </dependencies>
+
 </project>
