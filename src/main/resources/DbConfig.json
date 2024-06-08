@@ -1,5 +1,7 @@
 {
-  "url" : "jdbc:mysql://rm-bp1175exu9h9tyd17ao.mysql.rds.aliyuncs.com:3306/smtp",
-  "name": "FreeMan",
-  "password": "FREEDOMman0807"
+  "DbConnection1": {
+    "url" : "jdbc:mysql://rm-bp1175exu9h9tyd17ao.mysql.rds.aliyuncs.com:3306/gomoku",
+    "name": "FreeMan",
+    "password": "FREEDOMman0807"
+  }
 }

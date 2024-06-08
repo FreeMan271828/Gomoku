@@ -1,20 +1,94 @@
 package org.freeman.dao.Impl;
 
+import MyUtils.MyDate;
+import MyUtils.MyLog;
+import MyUtils.MyUuid;
+import MyUtils.MyConnnect;
 import org.freeman.dao.PlayerDao;
 import org.freeman.object.Player;
 
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
 public class PlayerDaoImpl implements PlayerDao {
 
+    //数据库连接类
+    private static final Connection connection = MyConnnect.getConnection();
+
+    //注入日志类
+    private static final MyLog LOG = MyLog.getInstance();
+
+    public PlayerDaoImpl() throws SQLException {
+    }
+
     @Override
-    public Player AddPlayer(Player p) {
-        if(p==null){ return null; }
+    public Player AddPlayer(Player p) throws SQLException {
+        if(p==null){
+            LOG.error("用户名称为空，dao层创建玩家失败");return null;}
+        else if(connection==null){
+            LOG.error("连接失败，请重新连接");}
+        else{
+            String sql = String.format("Insert into player values('%s','%s','%s','%s')",
+                    MyUuid.getUuid(),p.getName(), MyDate.getNowInDateTime(), MyDate.getNowInDateTime());
+            int affectedRow = connection.prepareStatement(sql).executeUpdate();
+            if(affectedRow>0){
+                return GetPlayers(p).getFirst();
+            }
+        }
         return null;
     }
 
     @Override
+    public List<Player> GetPlayers() throws SQLException {
+        String sql = "select * from player";
+        assert connection != null;
+        return getPlayerBySql(sql);
+    }
+
+    @Override
     public List<Player> GetPlayers(Player p) {
-        return List.of();
+        StringBuilder sb = new StringBuilder("SELECT * FROM Player WHERE 1=1");
+        if (p.getId() != null) {
+            sb.append(" AND id = '").append(p.getId()).append("'");
+        }
+        if (p.getName() != null) {
+            sb.append(" AND name = '").append(p.getName()).append("'");
+        }
+        if (p.getGmtCreated() != null) {
+            String gmtCreated = MyDate.truncateTime(p.getGmtCreated());
+            sb.append(" AND gmt_created = '").append(gmtCreated).append("'");
+        }
+        if (p.getGmtModified() != null) {
+            String gmtModified = MyDate.truncateTime(p.getGmtModified());
+            sb.append(" AND gmt_modified = '").append(gmtModified).append("'");
+        }
+        String sql = sb.toString();
+        List<Player> players = getPlayerBySql(sql);
+        if (players.isEmpty()) { LOG.error("查询失败"); return null;}
+        return players;
+    }
+
+    /**
+     * 基本方法
+     * 根据sql查询语句返回对应的User
+     */
+    private static List<Player> getPlayerBySql(String sql){
+        List<Player> players = new ArrayList<>();
+        assert connection != null;
+        System.out.println(sql);
+        try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            while (rs.next()) {
+                Player player = new Player();
+                player.setId(UUID.fromString(rs.getString("id")));
+                player.setName(rs.getString("name"));
+                player.setGmtCreated(rs.getTimestamp("gmt_created"));
+                player.setGmtModified(rs.getTimestamp("gmt_modified"));
+                players.add(player);
+            }
+        }catch (Exception e){
+            LOG.info("getPlayerBySql Exception: " + e.getMessage());
+            e.fillInStackTrace();
+        }
+        return players;
     }
 }
