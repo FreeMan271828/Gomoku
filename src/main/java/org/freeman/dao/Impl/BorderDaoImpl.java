@@ -22,8 +22,6 @@ public class BorderDaoImpl implements BorderDao {
 
     private static final Connection connection =  MyConnnect.getConnection();
 
-    private static final  BorderDaoImpl INSTANCE = new BorderDaoImpl();
-
     @Override
     public Border AddBorder(Border border) throws SQLException {
         assert connection != null;
@@ -77,9 +75,18 @@ public class BorderDaoImpl implements BorderDao {
 
     @Override
     public List<Border> GetBorders(int length, int width) throws SQLException {
+        assert connection != null;
         if(length==0 || width==0){ LOG.error("棋盘信息不全"); return null; }
         String sql = "select * from border WHERE length= "+length+ " and width="+width;
         return getBorderBySql(sql);
+    }
+
+    @Override
+    public Border GetBorder(UUID id) {
+        assert connection != null;
+        if(id==null){LOG.error("没有找到参数"); return null; }
+        String sql = String.format("SELECT * FROM border WHERE id = '%s'", id);
+        return getBorderBySql(sql).getFirst();
     }
 
     private static List<Border> getBorderBySql(String sql){
