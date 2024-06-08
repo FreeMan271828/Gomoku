@@ -8,10 +8,7 @@ import org.freeman.object.Border;
 import org.freeman.object.Game;
 import org.freeman.object.Player;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -49,7 +46,25 @@ public class GameDaoImpl implements GameDao {
 
     @Override
     public List<Game> GetGames(Game game) {
-        return List.of();
+        StringBuilder sb = new StringBuilder("SELECT * FROM Player WHERE 1=1");
+        if (game.getId() != null) {
+            sb.append(" AND id = '").append(game.getId()).append("'");
+        }
+        if (game.getBorder() != null) {
+            sb.append(" AND border_id = '").append(game.getBorder().getId()).append("'");
+        }
+        if(game.getPlayer1() != null){
+            sb.append(" AND player1_id = '").append(game.getPlayer1().getId()).append("'");
+        }
+        if(game.getPlayer2() != null){
+            sb.append(" AND player2_id = '").append(game.getPlayer2().getId()).append("'");
+        }
+        if(game.getStatus() !=null){
+            sb.append(" AND status = '").append(game.getStatus()).append("'");
+        }
+        MyDate.SetTimeParam(sb, game.getGmtCreated(), game.getGmtModified());
+        String sql = sb.toString();
+        return getGameBySql(sql);
     }
 
     private static List<Game> getGameBySql(String sql){

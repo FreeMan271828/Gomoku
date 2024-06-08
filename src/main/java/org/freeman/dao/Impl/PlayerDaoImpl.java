@@ -58,14 +58,7 @@ public class PlayerDaoImpl implements PlayerDao {
         if (p.getName() != null) {
             sb.append(" AND name = '").append(p.getName()).append("'");
         }
-        if (p.getGmtCreated() != null) {
-            String gmtCreated = MyDate.truncateTime(p.getGmtCreated());
-            sb.append(" AND gmt_created = '").append(gmtCreated).append("'");
-        }
-        if (p.getGmtModified() != null) {
-            String gmtModified = MyDate.truncateTime(p.getGmtModified());
-            sb.append(" AND gmt_modified = '").append(gmtModified).append("'");
-        }
+        MyDate.SetTimeParam(sb, p.getGmtCreated(), p.getGmtModified());
         String sql = sb.toString();
         List<Player> players = getPlayerBySql(sql);
         if (players.isEmpty()) { LOG.error("查询失败"); return null;}
