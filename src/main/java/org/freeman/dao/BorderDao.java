@@ -26,4 +26,12 @@ public interface BorderDao {
      * @return 符合的棋盘条件
      */
     public List<Border> GetBorders(Border border);
+
+    /**
+     * 根据棋盘的长宽获取棋盘
+     * @param length 棋盘的长
+     * @param width 棋盘的宽
+     * @return 棋盘信息
+     */
+    public List<Border> GetBorders(int length,int width) throws SQLException;
 }

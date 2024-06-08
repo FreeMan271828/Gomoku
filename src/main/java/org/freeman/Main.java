@@ -8,19 +8,24 @@ import org.freeman.dao.Impl.GameDaoImpl;
 import org.freeman.dao.Impl.PlayerDaoImpl;
 import org.freeman.dao.PlayerDao;
 import org.freeman.object.Border;
+import org.freeman.object.Player;
 
 import java.sql.SQLException;
 
 public class Main {
 
     public static void main(String[] args) throws SQLException {
-        registerDC();//依赖注入
+        registerDC();
+
         BorderDao borderDao = DependencyContainer.get(BorderDao.class);
-        Border border = new Border();
-        border.setLength(9);
-        border.setWidth(9);
-        Border border1 = borderDao.GetBorders(border).getFirst();
-        System.out.println(border1.getId());
+        PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
+        GameDao gameDao = DependencyContainer.get(GameDao.class);
+
+        Border border = borderDao.GetBorders(6,6).getFirst();
+        Player player1 = playerDao.GetPlayers("player1").getFirst();
+        Player player2 = playerDao.GetPlayers("player2").getFirst();
+        gameDao.newGame(border, player1, player2);
+
     }
 
     public static void registerDC(){

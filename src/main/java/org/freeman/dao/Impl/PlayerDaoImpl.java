@@ -37,8 +37,15 @@ public class PlayerDaoImpl implements PlayerDao {
 
     @Override
     public List<Player> GetPlayers() throws SQLException {
-        String sql = "select * from player";
         assert connection != null;
+        String sql = "select * from player";
+        return getPlayerBySql(sql);
+    }
+
+    @Override
+    public List<Player> GetPlayers(String name) {
+        assert connection != null;
+        String sql = "select * from player where name like '%"+name+"%'";
         return getPlayerBySql(sql);
     }
 
@@ -72,7 +79,6 @@ public class PlayerDaoImpl implements PlayerDao {
     private static List<Player> getPlayerBySql(String sql){
         List<Player> players = new ArrayList<>();
         assert connection != null;
-        System.out.println(sql);
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 Player player = new Player();

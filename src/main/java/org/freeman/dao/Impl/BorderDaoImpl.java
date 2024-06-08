@@ -9,6 +9,7 @@ import org.freeman.object.Border;
 import org.freeman.object.Player;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -74,10 +75,16 @@ public class BorderDaoImpl implements BorderDao {
         return borders;
     }
 
+    @Override
+    public List<Border> GetBorders(int length, int width) throws SQLException {
+        if(length==0 || width==0){ LOG.error("棋盘信息不全"); return null; }
+        String sql = "select * from border WHERE length= "+length+ " and width="+width;
+        return getBorderBySql(sql);
+    }
+
     private static List<Border> getBorderBySql(String sql){
         List<Border> borders = new ArrayList<>();
         assert connection != null;
-        System.out.println(sql);
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 Border border = new Border();
