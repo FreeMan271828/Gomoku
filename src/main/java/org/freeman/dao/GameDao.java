@@ -38,4 +38,13 @@ public interface GameDao {
      * @return Game实例
      */
     List<Game>GetGames(Game game);
+
+    /**
+     * 根据borderId playerId查询游戏
+     * @param borderId 棋盘Id
+     * @param player1Id 玩家1Id
+     * @param player2Id 玩家2Id
+     * @return 游戏实例
+     */
+    List<Game>GetGames(String borderId, String player1Id, String player2Id);
 }

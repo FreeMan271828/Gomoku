@@ -13,10 +13,10 @@ import java.util.*;
 public class PlayerDaoImpl implements PlayerDao {
 
     //数据库连接类
-    private static final Connection connection = MyConnnect.getConnection();
+    private final Connection connection = MyConnnect.getConnection();
 
     //注入日志类
-    private static final MyLog LOG = MyLog.getInstance();
+    private final MyLog LOG = MyLog.getInstance();
 
     @Override
     public Player AddPlayer(Player p) throws SQLException {
@@ -77,7 +77,7 @@ public class PlayerDaoImpl implements PlayerDao {
      * 基本方法
      * 根据sql查询语句返回对应的User
      */
-    private static List<Player> getPlayerBySql(String sql){
+    private List<Player> getPlayerBySql(String sql){
         List<Player> players = new ArrayList<>();
         assert connection != null;
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
@@ -95,4 +95,5 @@ public class PlayerDaoImpl implements PlayerDao {
         }
         return players;
     }
+
 }

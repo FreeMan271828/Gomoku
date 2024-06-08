@@ -1,5 +1,4 @@
 package org.freeman.dao.Impl;
-
 import myUtils.*;
 import org.freeman.dao.BorderDao;
 import org.freeman.dao.GameDao;
@@ -15,13 +14,11 @@ import java.util.UUID;
 
 public class GameDaoImpl implements GameDao {
 
-    private static final MyLog LOG = MyLog.getInstance();
+    private final MyLog LOG = MyLog.getInstance();
 
-    private static final Connection connection = MyConnnect.getConnection();
+    private final Connection connection = MyConnnect.getConnection();
 
-    private static final BorderDao borderDao = DependencyContainer.get(BorderDao.class);
-
-    private static final PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
+    private final BorderDao borderDao = DependencyContainer.get(BorderDao.class);
 
     @Override
     public Game newGame(Border border, Player player1, Player player2) throws SQLException {
@@ -34,7 +31,6 @@ public class GameDaoImpl implements GameDao {
         ps.setString(5, String.valueOf(0));      ps.setString(6, MyDate.getNowInDateTime());
         ps.setString(7, MyDate.getNowInDateTime());
         ps.executeUpdate();
-
         return null;
     }
 
@@ -48,7 +44,7 @@ public class GameDaoImpl implements GameDao {
     @Override
     public Game GetGame(UUID id) {
         assert connection!=null;
-        String sql = String.format("SELECT * FROM game WHERE id=%s", id);
+        String sql = String.format("SELECT * FROM game WHERE id='%s'", id);
         return getGameBySql(sql).getFirst();
     }
 
@@ -75,15 +71,29 @@ public class GameDaoImpl implements GameDao {
         return getGameBySql(sql);
     }
 
-    private static List<Game> getGameBySql(String sql){
+    @Override
+    public List<Game> GetGames(String borderId, String player1Id, String player2Id) {
+        assert connection!=null;
+        if(borderId.isEmpty()||player1Id.isEmpty()||player2Id.isEmpty()){
+            LOG.error("传入信息有误，无法查询");
+        }
+        String sql = String.format("SELECT * FROM GAME WHERE border_id= '%s' AND" +
+                " player1_id='%s' AND" + " player2_id='%s'", borderId, player1Id, player2Id);
+
+        return getGameBySql(sql);
+    }
+
+    private List<Game> getGameBySql(String sql){
         assert connection != null;
         List<Game> games = new ArrayList<>();
+        PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 Game game = new Game();
                 game.setId(UUID.fromString(rs.getString("id")));
                 game.setBorder(borderDao.GetBorder(UUID.fromString(rs.getString("border_id"))));
-                game.setPlayer1(playerDao.GetPlayer(UUID.fromString(rs.getString("player1_id"))));
+                UUID player1Id = UUID.fromString(rs.getString("player1_id"));
+                game.setPlayer1(playerDao.GetPlayer(player1Id));
                 game.setPlayer2(playerDao.GetPlayer(UUID.fromString(rs.getString("player2_id"))));
                 game.setStatus(rs.getInt("status"));
                 game.setGmtCreated(rs.getTimestamp("gmt_created"));
@@ -96,4 +106,5 @@ public class GameDaoImpl implements GameDao {
         }
         return games;
     }
+
 }
