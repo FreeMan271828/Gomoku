@@ -1,10 +1,10 @@
 package org.freeman.dao.Impl;
 
-import myUtils.DependencyContainer;
+import Factory.DaoFactory;
+import Factory.DaoFactoryImpl;
 import myUtils.MyConnnect;
 import myUtils.MyDate;
 import myUtils.MyLog;
-import org.eclipse.swt.internal.win32.LOGBRUSH;
 import org.freeman.dao.GameDao;
 import org.freeman.dao.PlayerDao;
 import org.freeman.dao.WinnerDao;
@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class WinnerDaoImpl implements WinnerDao {
+
+    private final DaoFactory daoFactory = new DaoFactoryImpl();
+    private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
+    private final GameDao gameDao = daoFactory.createDao(GameDao.class);
 
     private final Connection connection = MyConnnect.getConnection();
 
@@ -45,7 +49,6 @@ public class WinnerDaoImpl implements WinnerDao {
     @Override
     public Player GetWinner(UUID gameId) throws SQLException {
         assert connection != null;
-        PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
         String sql = "select * from winner where game_id=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, String.valueOf(gameId));
@@ -61,7 +64,6 @@ public class WinnerDaoImpl implements WinnerDao {
     @Override
     public List<Game> GetWinGames(UUID playerId) throws SQLException {
         assert connection != null;
-        GameDao gameDao = DependencyContainer.get(GameDao.class);
         String sql = "select * from winner where player_id=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, String.valueOf(playerId));
