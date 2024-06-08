@@ -13,6 +13,7 @@ import org.freeman.dao.PlayerDao;
 import org.freeman.object.Border;
 import org.freeman.object.Game;
 import org.freeman.object.Player;
+import org.freeman.service.BeforeGameService;
 
 import java.sql.SQLException;
 
@@ -20,14 +21,14 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         RegisterDC.registerDC();
-        BorderDao borderDao = DependencyContainer.get(BorderDao.class);
-        PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
-        GameDao gameDao = DependencyContainer.get(GameDao.class);
-
-        Border border = borderDao.GetBorders(6,6).getFirst();
-        Player player1 = playerDao.GetPlayers("player1").getFirst();
-        Player player2 = playerDao.GetPlayers("player2").getFirst();
-        Game game = gameDao.newGame(border, player1, player2);
+//        BorderDao borderDao = DependencyContainer.get(BorderDao.class);
+//        PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
+//        GameDao gameDao = DependencyContainer.get(GameDao.class);
+//
+//        Border border = borderDao.GetBorders(6,6).getFirst();
+//        Player player1 = playerDao.GetPlayers("player1").getFirst();
+//        Player player2 = playerDao.GetPlayers("player2").getFirst();
+//        Game game = gameDao.newGame(border, player1, player2);
 
     }
 }
