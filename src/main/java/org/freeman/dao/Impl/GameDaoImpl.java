@@ -25,6 +25,7 @@ public class GameDaoImpl implements GameDao {
 
     @Override
     public Game newGame(Border border, Player player1, Player player2) throws SQLException {
+        assert connection !=null;
         if(border==null || player1==null || player2==null){ LOG.error("信息不全，新建游戏错误"); return null; }
         String sql = "INSERT INTO game VALUES(?,?,?,?,?,?,?)";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -42,6 +43,13 @@ public class GameDaoImpl implements GameDao {
         assert connection!=null;
         String sql = "SELECT * FROM game ORDER BY gmt_modified DESC";
         return getGameBySql(sql);
+    }
+
+    @Override
+    public Game GetGame(UUID id) {
+        assert connection!=null;
+        String sql = String.format("SELECT * FROM game WHERE id=%s", id);
+        return getGameBySql(sql).getFirst();
     }
 
     @Override

@@ -36,7 +36,7 @@ public class PlayerDaoImpl implements PlayerDao {
     }
 
     @Override
-    public List<Player> GetPlayers() throws SQLException {
+    public List<Player> GetPlayers() {
         assert connection != null;
         String sql = "select * from player";
         return getPlayerBySql(sql);

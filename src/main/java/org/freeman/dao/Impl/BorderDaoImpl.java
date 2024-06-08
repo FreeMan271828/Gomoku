@@ -6,10 +6,8 @@ import MyUtils.MyLog;
 import MyUtils.MyUuid;
 import org.freeman.dao.BorderDao;
 import org.freeman.object.Border;
-import org.freeman.object.Player;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
