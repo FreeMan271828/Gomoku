@@ -72,6 +72,14 @@ public class PlayerDaoImpl implements PlayerDao {
         return players;
     }
 
+    @Override
+    public Player GetPlayer(UUID id) {
+        assert connection != null;
+        if(id == null){ LOG.error("未找到参数"); return null;}
+        String sql = "select * from player where id = '"+id+"'";
+        return getPlayerBySql(sql).getFirst();
+    }
+
     /**
      * 基本方法
      * 根据sql查询语句返回对应的User

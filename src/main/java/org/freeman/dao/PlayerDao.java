@@ -5,6 +5,7 @@ import org.freeman.object.Player;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public interface PlayerDao {
 
@@ -34,4 +35,10 @@ public interface PlayerDao {
      */
     public List<Player> GetPlayers(Player p);
 
+    /**
+     * 根据id获取用户
+     * @param id 用户id
+     * @return 用户实例
+     */
+    public Player GetPlayer(UUID id);
 }

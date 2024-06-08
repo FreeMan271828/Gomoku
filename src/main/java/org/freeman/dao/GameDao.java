@@ -9,6 +9,14 @@ import java.util.List;
 
 public interface GameDao {
 
+    /**
+     * 新建游戏
+     * @param border
+     * @param player1
+     * @param player2
+     * @return
+     * @throws SQLException
+     */
     public Game newGame(Border border, Player player1,Player player2) throws SQLException;
 
     public List<Game> GetGames();

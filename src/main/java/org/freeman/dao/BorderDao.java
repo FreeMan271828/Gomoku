@@ -5,6 +5,7 @@ import org.freeman.object.Border;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public interface BorderDao {
     /**
@@ -34,4 +35,11 @@ public interface BorderDao {
      * @return 棋盘信息
      */
     public List<Border> GetBorders(int length,int width) throws SQLException;
+
+    /**
+     * 根据id 获取棋盘
+     * @param id 棋盘的id
+     * @return 棋盘实例
+     */
+    public Border GetBorder(UUID id);
 }
