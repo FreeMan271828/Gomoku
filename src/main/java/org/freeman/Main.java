@@ -2,30 +2,36 @@ package org.freeman;
 
 import launcher.RegisterDC;
 import myUtils.DependencyContainer;
-import org.freeman.dao.BorderDao;
-import org.freeman.dao.CellDao;
-import org.freeman.dao.GameDao;
-import org.freeman.dao.PlayerDao;
+import org.freeman.dao.*;
 import org.freeman.object.Border;
 import org.freeman.object.Game;
 import org.freeman.object.Player;
 
+import java.util.UUID;
+
 
 public class Main {
 
-    private static final BorderDao borderDao;
+    private static BorderDao borderDao;
 
-    private static final PlayerDao playerDao;
+    private static PlayerDao playerDao;
 
-    private static final GameDao gameDao;
+    private static GameDao gameDao;
+
+    private static WinnerDao winnerDao;
 
     public static void main(String[] args) throws Exception {
-        Border border = borderDao.GetBorders(6,6).getFirst();
-        Player player1 = playerDao.GetPlayers("player1").getFirst();
-        Player player2 = playerDao.GetPlayers("player2").getFirst();
+        init();
+        Game game = gameDao.GetGame(UUID.fromString("52074090-cf6d-4525-9cfd-0868b7e642d2"));
+        Player player = playerDao.GetPlayer(UUID.fromString("7ad4c86d-4c57-4cd5-99f3-2d67b04b99ad"));
+        System.out.println(winnerDao.GetWinner(UUID.fromString("52074090-cf6d-4525-9cfd-0868b7e642d2")));
+    }
 
-        Game game = gameDao.GetGames(border.getId().toString(),player1.getId().toString(),player2.getId().toString()).getFirst();
-        System.out.println(game.getId());
+    public static void init(){
+        borderDao = DependencyContainer.get(BorderDao.class);
+        playerDao = DependencyContainer.get(PlayerDao.class);
+        gameDao = DependencyContainer.get(GameDao.class);
+        winnerDao = DependencyContainer.get(WinnerDao.class);
     }
 
     static {
@@ -34,8 +40,5 @@ public class Main {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        borderDao = DependencyContainer.get(BorderDao.class);
-        playerDao = DependencyContainer.get(PlayerDao.class);
-        gameDao = DependencyContainer.get(GameDao.class);
     }
 }

@@ -1,14 +1,8 @@
 package launcher;
 
 import myUtils.DependencyContainer;
-import org.freeman.dao.BorderDao;
-import org.freeman.dao.CellDao;
-import org.freeman.dao.GameDao;
-import org.freeman.dao.Impl.BorderDaoImpl;
-import org.freeman.dao.Impl.CellDaoImpl;
-import org.freeman.dao.Impl.GameDaoImpl;
-import org.freeman.dao.Impl.PlayerDaoImpl;
-import org.freeman.dao.PlayerDao;
+import org.freeman.dao.*;
+import org.freeman.dao.Impl.*;
 
 public class RegisterDC {
 
@@ -21,6 +15,8 @@ public class RegisterDC {
         DependencyContainer.register(PlayerDao.class,new PlayerDaoImpl());
 
         DependencyContainer.register(CellDao.class,new CellDaoImpl());
+
+        DependencyContainer.register(WinnerDao.class,new WinnerDaoImpl());
     }
 
 
