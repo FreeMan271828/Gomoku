@@ -1,4 +1,5 @@
 package Factory;
+
 import org.freeman.dao.BorderDao;
 import org.freeman.dao.CellDao;
 import org.freeman.dao.GameDao;
@@ -14,18 +15,14 @@ public class DaoFactoryImpl implements DaoFactory {
 
     @Override
     public <T> T createDao(Class<T> daoClass) {
-        if (daoClass.equals(BorderDao.class)) {
-            return (T) new BorderDaoImpl();
-        } else if (daoClass.equals(CellDao.class)) {
-            return (T) new CellDaoImpl();
-        } else if (daoClass.equals(GameDao.class)) {
-            return (T) new GameDaoImpl();
-        } else if (daoClass.equals(PlayerDao.class)) {
-            return (T) new PlayerDaoImpl();
-        } else if (daoClass.equals(WinnerDao.class)) {
-            return (T) new WinnerDaoImpl();
-        } else {
-            throw new IllegalArgumentException("不支持的 DAO 类： " + daoClass.getName());
-        }
+        return switch (daoClass.getName()) {
+            case "org.freeman.dao.BorderDao"  -> (T) new BorderDaoImpl();
+            case "org.freeman.dao.CellDao"  -> (T) new CellDaoImpl();
+            case "org.freeman.dao.GameDao"  -> (T) new GameDaoImpl();
+            case "org.freeman.dao.PlayerDao"  -> (T) new PlayerDaoImpl();
+            case "org.freeman.dao.WinnerDao" -> (T) new WinnerDaoImpl();
+            default -> throw new IllegalArgumentException("不支持的 DAO 类： " + daoClass.getName());
+        };
     }
 }
+
