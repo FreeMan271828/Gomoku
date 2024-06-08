@@ -18,9 +18,6 @@ public class PlayerDaoImpl implements PlayerDao {
     //注入日志类
     private static final MyLog LOG = MyLog.getInstance();
 
-    public PlayerDaoImpl() throws SQLException {
-    }
-
     @Override
     public Player AddPlayer(Player p) throws SQLException {
         if(p==null){

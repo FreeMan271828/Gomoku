@@ -21,6 +21,8 @@ public class BorderDaoImpl implements BorderDao {
 
     private static final Connection connection =  MyConnnect.getConnection();
 
+    private static final  BorderDaoImpl INSTANCE = new BorderDaoImpl();
+
     @Override
     public Border AddBorder(Border border) throws SQLException {
         assert connection != null;
@@ -48,15 +50,15 @@ public class BorderDaoImpl implements BorderDao {
 
     @Override
     public List<Border> GetBorders(Border border) {
-        StringBuilder sb = new StringBuilder("SELECT * FROM Player WHERE 1=1");
+        StringBuilder sb = new StringBuilder("SELECT * FROM border WHERE 1=1");
         if (border.getId() != null) {
             sb.append(" AND id = '").append(border.getId()).append("'");
         }
         if (border.getLength() != null) {
-            sb.append(" AND name = '").append(border.getLength()).append("'");
+            sb.append(" AND length = ").append(border.getLength());
         }
         if (border.getWidth() != null) {
-            sb.append(" AND name = '").append(border.getWidth()).append("'");
+            sb.append(" AND width = ").append(border.getWidth());
         }
         if (border.getGmtCreated() != null) {
             String gmtCreated = MyDate.truncateTime(border.getGmtCreated());
@@ -82,8 +84,8 @@ public class BorderDaoImpl implements BorderDao {
                 border.setId(UUID.fromString(rs.getString("id")));
                 border.setLength(rs.getInt("length"));
                 border.setWidth(rs.getInt("width"));
-                border.setGmtCreated(rs.getTimestamp("gmtCreated"));
-                border.setGmtModified(rs.getTimestamp("gmtModified"));
+                border.setGmtCreated(rs.getTimestamp("gmt_created"));
+                border.setGmtModified(rs.getTimestamp("gmt_modified"));
                 borders.add(border);
             }
         }catch (Exception e){

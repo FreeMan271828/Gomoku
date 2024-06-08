@@ -1,12 +1,12 @@
 package org.freeman.dao;
 
+import org.freeman.dao.Impl.BorderDaoImpl;
 import org.freeman.object.Border;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface BorderDao {
-
     /**
      * 创建一个新的棋盘
      * @param border 要求输入长度宽度
