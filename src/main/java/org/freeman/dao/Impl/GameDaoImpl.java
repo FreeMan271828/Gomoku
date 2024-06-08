@@ -70,7 +70,7 @@ public class GameDaoImpl implements GameDao {
         if(game.getStatus() !=null){
             sb.append(" AND status = '").append(game.getStatus()).append("'");
         }
-        MyDate.SetTimeParam(sb, game.getGmtCreated(), game.getGmtModified());
+        BaseMethod.SetTimeParam(sb, game.getGmtCreated(), game.getGmtModified());
         String sql = sb.toString();
         return getGameBySql(sql);
     }

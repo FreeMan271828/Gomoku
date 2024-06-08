@@ -57,7 +57,7 @@ public class BorderDaoImpl implements BorderDao {
         if (border.getWidth() != null) {
             sb.append(" AND width = ").append(border.getWidth());
         }
-        MyDate.SetTimeParam(sb, border.getGmtCreated(), border.getGmtModified());
+        BaseMethod.SetTimeParam(sb, border.getGmtCreated(), border.getGmtModified());
         String sql = sb.toString();
         List<Border>borders = getBorderBySql(sql);
         if (borders.isEmpty()) { LOG.error("查询失败"); return null;}
