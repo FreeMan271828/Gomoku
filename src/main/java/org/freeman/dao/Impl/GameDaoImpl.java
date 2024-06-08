@@ -1,6 +1,6 @@
 package org.freeman.dao.Impl;
 
-import MyUtils.*;
+import myUtils.*;
 import org.freeman.dao.BorderDao;
 import org.freeman.dao.GameDao;
 import org.freeman.dao.PlayerDao;
@@ -8,10 +8,7 @@ import org.freeman.object.Border;
 import org.freeman.object.Game;
 import org.freeman.object.Player;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +25,7 @@ public class GameDaoImpl implements GameDao {
 
     @Override
     public Game newGame(Border border, Player player1, Player player2) throws SQLException {
+        assert connection !=null;
         if(border==null || player1==null || player2==null){ LOG.error("信息不全，新建游戏错误"); return null; }
         String sql = "INSERT INTO game VALUES(?,?,?,?,?,?,?)";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -48,8 +46,33 @@ public class GameDaoImpl implements GameDao {
     }
 
     @Override
+    public Game GetGame(UUID id) {
+        assert connection!=null;
+        String sql = String.format("SELECT * FROM game WHERE id=%s", id);
+        return getGameBySql(sql).getFirst();
+    }
+
+    @Override
     public List<Game> GetGames(Game game) {
-        return List.of();
+        StringBuilder sb = new StringBuilder("SELECT * FROM Player WHERE 1=1");
+        if (game.getId() != null) {
+            sb.append(" AND id = '").append(game.getId()).append("'");
+        }
+        if (game.getBorder() != null) {
+            sb.append(" AND border_id = '").append(game.getBorder().getId()).append("'");
+        }
+        if(game.getPlayer1() != null){
+            sb.append(" AND player1_id = '").append(game.getPlayer1().getId()).append("'");
+        }
+        if(game.getPlayer2() != null){
+            sb.append(" AND player2_id = '").append(game.getPlayer2().getId()).append("'");
+        }
+        if(game.getStatus() !=null){
+            sb.append(" AND status = '").append(game.getStatus()).append("'");
+        }
+        BaseMethod.SetTimeParam(sb, game.getGmtCreated(), game.getGmtModified());
+        String sql = sb.toString();
+        return getGameBySql(sql);
     }
 
     private static List<Game> getGameBySql(String sql){

@@ -1,4 +1,4 @@
-package MyUtils;
+package myUtils;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;

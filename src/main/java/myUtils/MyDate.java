@@ -1,4 +1,4 @@
-package MyUtils;
+package myUtils;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -25,4 +25,5 @@ public class MyDate {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(new Date(timestamp.getTime()));
     }
+
 }

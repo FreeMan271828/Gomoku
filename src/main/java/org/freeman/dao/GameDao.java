@@ -6,20 +6,36 @@ import org.freeman.object.Player;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public interface GameDao {
 
     /**
      * 新建游戏
-     * @param border
-     * @param player1
-     * @param player2
-     * @return
-     * @throws SQLException
+     * @param border 游戏使用的棋盘
+     * @param player1 游戏玩家1
+     * @param player2 游戏玩家2
+     * @return 新建的棋盘实例
      */
-    public Game newGame(Border border, Player player1,Player player2) throws SQLException;
+    Game newGame(Border border, Player player1,Player player2) throws SQLException;
 
-    public List<Game> GetGames();
+    /**
+     * 获取全部的游戏
+     * @return 获取游戏
+     */
+    List<Game> GetGames();
 
-    public List<Game>GetGames(Game game);
+    /**
+     * 根据id查询游戏
+     * @param id 游戏的id
+     * @return 游戏实例
+     */
+    Game GetGame(UUID id);
+
+    /**
+     * 根据game查询游戏
+     * @param game 查询细腻系
+     * @return Game实例
+     */
+    List<Game>GetGames(Game game);
 }

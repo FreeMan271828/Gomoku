@@ -1,15 +1,13 @@
 package org.freeman.dao.Impl;
 
-import MyUtils.MyConnnect;
-import MyUtils.MyDate;
-import MyUtils.MyLog;
-import MyUtils.MyUuid;
+import myUtils.MyConnnect;
+import myUtils.MyDate;
+import myUtils.MyLog;
+import myUtils.MyUuid;
 import org.freeman.dao.BorderDao;
 import org.freeman.object.Border;
-import org.freeman.object.Player;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -59,14 +57,7 @@ public class BorderDaoImpl implements BorderDao {
         if (border.getWidth() != null) {
             sb.append(" AND width = ").append(border.getWidth());
         }
-        if (border.getGmtCreated() != null) {
-            String gmtCreated = MyDate.truncateTime(border.getGmtCreated());
-            sb.append(" AND gmt_created = '").append(gmtCreated).append("'");
-        }
-        if (border.getGmtModified() != null) {
-            String gmtModified = MyDate.truncateTime(border.getGmtModified());
-            sb.append(" AND gmt_modified = '").append(gmtModified).append("'");
-        }
+        BaseMethod.SetTimeParam(sb, border.getGmtCreated(), border.getGmtModified());
         String sql = sb.toString();
         List<Border>borders = getBorderBySql(sql);
         if (borders.isEmpty()) { LOG.error("查询失败"); return null;}

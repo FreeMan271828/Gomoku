@@ -1,9 +1,9 @@
 package org.freeman.dao.Impl;
 
-import MyUtils.MyDate;
-import MyUtils.MyLog;
-import MyUtils.MyUuid;
-import MyUtils.MyConnnect;
+import myUtils.MyDate;
+import myUtils.MyLog;
+import myUtils.MyUuid;
+import myUtils.MyConnnect;
 import org.freeman.dao.PlayerDao;
 import org.freeman.object.Player;
 
@@ -25,7 +25,7 @@ public class PlayerDaoImpl implements PlayerDao {
         else if(connection==null){
             LOG.error("连接失败，请重新连接");}
         else{
-            String sql = String.format("Insert into player values('%s','%s','%s','%s')",
+            String sql = String.format("INSERT INTO PLAYER VALUES('%s','%s','%s','%s');",
                     MyUuid.getUuid(),p.getName(), MyDate.getNowInDateTime(), MyDate.getNowInDateTime());
             int affectedRow = connection.prepareStatement(sql).executeUpdate();
             if(affectedRow>0){
@@ -36,7 +36,7 @@ public class PlayerDaoImpl implements PlayerDao {
     }
 
     @Override
-    public List<Player> GetPlayers() throws SQLException {
+    public List<Player> GetPlayers() {
         assert connection != null;
         String sql = "select * from player";
         return getPlayerBySql(sql);
@@ -58,14 +58,7 @@ public class PlayerDaoImpl implements PlayerDao {
         if (p.getName() != null) {
             sb.append(" AND name = '").append(p.getName()).append("'");
         }
-        if (p.getGmtCreated() != null) {
-            String gmtCreated = MyDate.truncateTime(p.getGmtCreated());
-            sb.append(" AND gmt_created = '").append(gmtCreated).append("'");
-        }
-        if (p.getGmtModified() != null) {
-            String gmtModified = MyDate.truncateTime(p.getGmtModified());
-            sb.append(" AND gmt_modified = '").append(gmtModified).append("'");
-        }
+        BaseMethod.SetTimeParam(sb, p.getGmtCreated(), p.getGmtModified());
         String sql = sb.toString();
         List<Player> players = getPlayerBySql(sql);
         if (players.isEmpty()) { LOG.error("查询失败"); return null;}
