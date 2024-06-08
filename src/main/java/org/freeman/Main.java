@@ -19,7 +19,7 @@ import java.sql.SQLException;
 public class Main {
 
     public static void main(String[] args) throws SQLException {
-        RegisterDC.registerDC();
+
         BorderDao borderDao = DependencyContainer.get(BorderDao.class);
         PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
         GameDao gameDao = DependencyContainer.get(GameDao.class);

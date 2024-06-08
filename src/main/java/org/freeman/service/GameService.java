@@ -3,6 +3,7 @@ package org.freeman.service;
 
 import myUtils.DependencyContainer;
 import org.freeman.dao.BorderDao;
+import org.freeman.dao.CellDao;
 import org.freeman.dao.GameDao;
 import org.freeman.dao.PlayerDao;
 import org.freeman.object.Border;
@@ -10,6 +11,7 @@ import org.freeman.object.Cell;
 import org.freeman.object.Game;
 import org.freeman.object.Player;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class GameService {
@@ -28,6 +30,7 @@ public class GameService {
     private final BorderDao borderDao = DependencyContainer.get(BorderDao.class);
     private final GameDao gameDao = DependencyContainer.get(GameDao.class);
     private final PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
+    private final CellDao cellDao = DependencyContainer.get(CellDao.class);
 
     // 选择对局玩家
     public void setPlayerIdToGame(Player player1, Player player2){
@@ -42,14 +45,25 @@ public class GameService {
     }
 
     //落子功能
-    public void putChess(int x,int y){
-        Cell cell = new Cell();
-        cell.setX(x);
-        cell.setY(y);
-
+    public void putChess(int x,int y,boolean isBlack){
+        if(isBlack){
+            //黑子为1
+            allChess[x][y] = 1;
+        }else{
+            allChess[x][y] = 1;
+        }
     }
 
-    // 检查是否胜利
+    //悔棋，玩家可以在本方回合结束之前任意悔棋，在确认结束本回合后将无法悔棋
+    public void regretChess(int x,int y){
+        allChess[x][y] = 0;
+    }
+    //保存棋子记录,在确认确认结束本方回合，进入对方回合时调用
+    public void loadChess(Cell cell) throws SQLException {
+       cellDao.AddCell(cell);
+    }
+
+    // 检查是否胜利，在
     public boolean checkWin(int x, int y) {
         int color = allChess[x][y];  // 获取当前位置的棋子颜色
         // 检查四个方向是否有五个连续的相同颜色的棋子
