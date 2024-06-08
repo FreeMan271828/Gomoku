@@ -1,6 +1,7 @@
 package org.freeman.dao.Impl;
 import myUtils.*;
 import org.freeman.dao.BorderDao;
+import org.freeman.dao.CellDao;
 import org.freeman.dao.GameDao;
 import org.freeman.dao.PlayerDao;
 import org.freeman.object.Border;
@@ -84,9 +85,11 @@ public class GameDaoImpl implements GameDao {
     }
 
     private List<Game> getGameBySql(String sql){
+
+        PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
         assert connection != null;
         List<Game> games = new ArrayList<>();
-        PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
+
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 Game game = new Game();
@@ -106,5 +109,4 @@ public class GameDaoImpl implements GameDao {
         }
         return games;
     }
-
 }

@@ -13,6 +13,7 @@ import org.freeman.dao.PlayerDao;
 public class RegisterDC {
 
     public static void register() throws Exception {
+
         DependencyContainer.register(BorderDao.class,new BorderDaoImpl());
 
         DependencyContainer.register(GameDao.class,new GameDaoImpl());

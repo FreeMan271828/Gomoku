@@ -25,9 +25,13 @@ public class PlayerDaoImpl implements PlayerDao {
         else if(connection==null){
             LOG.error("连接失败，请重新连接");}
         else{
-            String sql = String.format("INSERT INTO PLAYER VALUES('%s','%s','%s','%s');",
-                    MyUuid.getUuid(),p.getName(), MyDate.getNowInDateTime(), MyDate.getNowInDateTime());
-            int affectedRow = connection.prepareStatement(sql).executeUpdate();
+            String sql = "INSERT INTO PLAYER VALUES(?, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, MyUuid.getUuid());
+            stmt.setString(2, p.getName());
+            stmt.setString(3, MyDate.getNowInDateTime());
+            stmt.setString(4, MyDate.getNowInDateTime());
+            int affectedRow = stmt.executeUpdate();
             if(affectedRow>0){
                 return GetPlayers(p).getFirst();
             }
