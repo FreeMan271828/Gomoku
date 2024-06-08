@@ -13,10 +13,10 @@ import java.util.*;
 public class PlayerDaoImpl implements PlayerDao {
 
     //数据库连接类
-    private static final Connection connection = MyConnnect.getConnection();
+    private final Connection connection = MyConnnect.getConnection();
 
     //注入日志类
-    private static final MyLog LOG = MyLog.getInstance();
+    private final MyLog LOG = MyLog.getInstance();
 
     @Override
     public Player AddPlayer(Player p) throws SQLException {
@@ -25,9 +25,13 @@ public class PlayerDaoImpl implements PlayerDao {
         else if(connection==null){
             LOG.error("连接失败，请重新连接");}
         else{
-            String sql = String.format("INSERT INTO PLAYER VALUES('%s','%s','%s','%s');",
-                    MyUuid.getUuid(),p.getName(), MyDate.getNowInDateTime(), MyDate.getNowInDateTime());
-            int affectedRow = connection.prepareStatement(sql).executeUpdate();
+            String sql = "INSERT INTO PLAYER VALUES(?, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, MyUuid.getUuid());
+            stmt.setString(2, p.getName());
+            stmt.setString(3, MyDate.getNowInDateTime());
+            stmt.setString(4, MyDate.getNowInDateTime());
+            int affectedRow = stmt.executeUpdate();
             if(affectedRow>0){
                 return GetPlayers(p).getFirst();
             }
@@ -77,7 +81,7 @@ public class PlayerDaoImpl implements PlayerDao {
      * 基本方法
      * 根据sql查询语句返回对应的User
      */
-    private static List<Player> getPlayerBySql(String sql){
+    private List<Player> getPlayerBySql(String sql){
         List<Player> players = new ArrayList<>();
         assert connection != null;
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
@@ -95,4 +99,5 @@ public class PlayerDaoImpl implements PlayerDao {
         }
         return players;
     }
+
 }

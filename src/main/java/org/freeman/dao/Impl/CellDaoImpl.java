@@ -15,13 +15,13 @@ import java.util.UUID;
 
 public class CellDaoImpl implements CellDao {
 
-    private static final MyLog LOG = MyLog.getInstance();
+    private final MyLog LOG = MyLog.getInstance();
 
-    private static final Connection connection = MyConnnect.getConnection();
+    private final Connection connection = MyConnnect.getConnection();
 
-    private static final PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
+    private final PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
 
-    private static final GameDao gameDao = DependencyContainer.get(GameDao.class);
+    private final GameDao gameDao = DependencyContainer.get(GameDao.class);
 
     @Override
     public Cell AddCell(Cell cell) throws SQLException {
@@ -56,7 +56,7 @@ public class CellDaoImpl implements CellDao {
         return getCellBySql(sql);
     }
 
-    private static List<Cell> getCellBySql(String sql){
+    private  List<Cell> getCellBySql(String sql){
         assert connection != null;
         List<Cell> cells = new ArrayList<>();
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
@@ -76,4 +76,5 @@ public class CellDaoImpl implements CellDao {
         }
         return cells;
     }
+
 }

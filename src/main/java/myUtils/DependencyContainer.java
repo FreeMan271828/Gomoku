@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DependencyContainer {
+
     private static final Map<Class<?>, Object> instances = new HashMap<>();
 
     public static void register(Class<?> interfaceClass, Object instance) {

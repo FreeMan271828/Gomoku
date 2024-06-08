@@ -65,7 +65,7 @@ public class BorderDaoImpl implements BorderDao {
     }
 
     @Override
-    public List<Border> GetBorders(int length, int width) throws SQLException {
+    public List<Border> GetBorders(int length, int width) {
         assert connection != null;
         if(length==0 || width==0){ LOG.error("棋盘信息不全"); return null; }
         String sql = "select * from border WHERE length= "+length+ " and width="+width;
