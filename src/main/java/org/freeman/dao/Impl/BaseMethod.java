@@ -1,6 +1,6 @@
 package org.freeman.dao.Impl;
 
-import MyUtils.MyDate;
+import myUtils.MyDate;
 
 import java.sql.Timestamp;
 

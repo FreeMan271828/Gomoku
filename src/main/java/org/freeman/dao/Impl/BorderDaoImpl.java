@@ -1,9 +1,9 @@
 package org.freeman.dao.Impl;
 
-import MyUtils.MyConnnect;
-import MyUtils.MyDate;
-import MyUtils.MyLog;
-import MyUtils.MyUuid;
+import myUtils.MyConnnect;
+import myUtils.MyDate;
+import myUtils.MyLog;
+import myUtils.MyUuid;
 import org.freeman.dao.BorderDao;
 import org.freeman.object.Border;
 

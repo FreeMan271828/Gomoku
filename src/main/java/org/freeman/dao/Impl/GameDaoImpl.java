@@ -1,6 +1,6 @@
 package org.freeman.dao.Impl;
 
-import MyUtils.*;
+import myUtils.*;
 import org.freeman.dao.BorderDao;
 import org.freeman.dao.GameDao;
 import org.freeman.dao.PlayerDao;
