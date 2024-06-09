@@ -2,9 +2,11 @@ package org.freeman.service;
 
 import Factory.DaoFactory;
 import Factory.DaoFactoryImpl;
+import lombok.Data;
 import org.freeman.dao.BorderDao;
 import org.freeman.dao.GameDao;
 import org.freeman.dao.PlayerDao;
+import org.freeman.dao.WinnerDao;
 import org.freeman.object.Border;
 import org.freeman.object.Game;
 import org.freeman.object.Player;
@@ -17,13 +19,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 
-
+@Data
 public class BeforeGameService {
 
     private final DaoFactory daoFactory = new DaoFactoryImpl();
     private final BorderDao borderDao = daoFactory.createDao(BorderDao.class);
     private final GameDao gameDao = daoFactory.createDao(GameDao.class);
     private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
+    private final WinnerDao winnerDao = daoFactory.createDao(WinnerDao.class);
     private int BorderWidth;
     private int BorderHeight;
     private List<Player> allPlayers;
@@ -37,7 +40,6 @@ public class BeforeGameService {
         this.allBorders = allBorder;
     }
 
-    //设置棋盘大小
     public void setSize(int width,int height){
         this.BorderWidth = width;
         this.BorderHeight = height;
@@ -59,8 +61,15 @@ public class BeforeGameService {
     //获取玩家信息
     public void  get_AllPlayers() throws SQLException {
         List<Player> players = playerDao.GetPlayers();
+        if(players == null){
+            System.out.println("Players为空");
+        }else{
+            System.out.println("不会为空");
+        }
         this.allPlayers = players;
     }
+
+
     public void get_AllGames(){
         List<Game> games = gameDao.GetGames();
         this.allGames = games;
@@ -82,8 +91,16 @@ public class BeforeGameService {
             this.playersGames = playerGamesMap;
         }
 
-    //根据
+    //根据玩家id获取这该玩家所赢的局数
+    public List<Game> getWinGames(Player player) throws SQLException {
+        List<Game> winGames = winnerDao.GetWinGames(player.getId());
+        return  winGames;
+    }
 
-
+    //根据游戏获取游戏赢家
+    public Player getWinner(Game game) throws SQLException {
+        Player player = winnerDao.GetWinner(game.getId());
+        return player;
+    }
 
 }

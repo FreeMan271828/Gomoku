@@ -18,7 +18,7 @@ public interface BorderDao {
      * 获取目前的所有棋盘
      * @return 所有的棋盘
      */
-    List<Border> GetBorders();
+    List<Border>    GetBorders();
 
     /**
      * 获取符合条件的棋盘

@@ -3,6 +3,7 @@ package org.freeman.service;
 
 import Factory.DaoFactory;
 import Factory.DaoFactoryImpl;
+import lombok.Data;
 import org.freeman.dao.*;
 import org.freeman.object.Border;
 import org.freeman.object.Cell;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Data
 public class GameService {
 
     private Game currentGame;
@@ -32,7 +34,7 @@ public class GameService {
     private final GameDao gameDao = daoFactory.createDao(GameDao.class);
     private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
     private final CellDao cellDao = daoFactory.createDao(CellDao.class);
-    private final WinnerDao winnerDao = daoFactory.createDao()
+    private final WinnerDao winnerDao = daoFactory.createDao(WinnerDao.class);
 
     // 选择对局玩家
     public void setPlayerIdToGame(Player player1, Player player2){
@@ -115,11 +117,13 @@ public class GameService {
         blackMessage = maxTime > 0 ? formatTime(maxTime) : "无限制";  // 更新黑方时间信息
         whiteMessage = maxTime > 0 ? formatTime(maxTime) : "无限制";  // 更新白方时间信息
         canPlay = true;  // 设置游戏可以继续
+        currentGame = new Game();
         registerCells = new ArrayList<>();
     }
 
-    public void setWinner(Player player){
-
+    //在决出胜负后，同保存缓存记录一块调用
+    public void setWinner(Player player) throws SQLException {
+        winnerDao.AddWinner(player,currentGame);
     }
     // 将时间格式化为 "小时:分钟:秒" 的字符串
     private String formatTime(int time) {
@@ -133,76 +137,6 @@ public class GameService {
         for (Cell registerCell : registerCells) {
             cellDao.AddCell(registerCell);
         }
-    }
-
-    // 获取棋盘状态
-    public int[][] getAllChess() {
-        return allChess;
-    }
-
-    // 获取当前是否轮到黑方
-    public boolean isBlack() {
-        return isBlack;
-    }
-
-    // 设置当前是否轮到黑方
-    public void setBlack(boolean isBlack) {
-        this.isBlack = isBlack;
-    }
-
-    // 获取游戏是否可以继续
-    public boolean isCanPlay() {
-        return canPlay;
-    }
-
-    // 设置游戏是否可以继续
-    public void setCanPlay(boolean canPlay) {
-        this.canPlay = canPlay;
-    }
-
-    // 获取游戏状态信息
-    public String getMessage() {
-        return message;
-    }
-
-    // 获取黑方时间信息
-    public String getBlackMessage() {
-        return blackMessage;
-    }
-
-    // 获取白方时间信息
-    public String getWhiteMessage() {
-        return whiteMessage;
-    }
-
-    // 获取每方的最大下棋时间
-    public int getMaxTime() {
-        return maxTime;
-    }
-
-    // 设置每方的最大下棋时间
-    public void setMaxTime(int maxTime) {
-        this.maxTime = maxTime;
-    }
-
-    // 获取黑方剩余时间
-    public int getBlackTime() {
-        return blackTime;
-    }
-
-    // 设置黑方剩余时间
-    public void setBlackTime(int blackTime) {
-        this.blackTime = blackTime;
-    }
-
-    // 获取白方剩余时间
-    public int getWhiteTime() {
-        return whiteTime;
-    }
-
-    // 设置白方剩余时间
-    public void setWhiteTime(int whiteTime) {
-        this.whiteTime = whiteTime;
     }
 
 }
