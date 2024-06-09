@@ -3,7 +3,9 @@ package org.freeman.dao;
 import org.freeman.object.Game;
 import org.freeman.object.Player;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public interface WinnerDao {
 
@@ -13,19 +15,19 @@ public interface WinnerDao {
      * @param game 游戏(id必需)
      * @return 是否成功
      */
-    boolean AddWinner(Player player,Game game);
+    boolean AddWinner(Player player,Game game) throws SQLException;
 
     /**
      * 返回一局游戏的赢家
      * @param gameId 游戏Id
      * @return 赢家
      */
-    Player GetWinner(String gameId);
+    Player GetWinner(UUID gameId) throws SQLException;
 
     /**
      * 获取玩家赢的局数
-     * @param player 玩家信息
+     * @param playerId 玩家信息
      * @return Game集合
      */
-    List<Game> GetWinGames(Player player);
+    List<Game> GetWinGames(UUID playerId) throws SQLException;
 }

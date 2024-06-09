@@ -1,6 +1,7 @@
 package org.freeman.service;
 
-import myUtils.DependencyContainer;
+import Factory.DaoFactory;
+import Factory.DaoFactoryImpl;
 import org.freeman.dao.BorderDao;
 import org.freeman.dao.GameDao;
 import org.freeman.dao.PlayerDao;
@@ -15,10 +16,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
+
 public class BeforeGameService {
-    private final BorderDao borderDao = DependencyContainer.get(BorderDao.class);
-    private final GameDao gameDao = DependencyContainer.get(GameDao.class);
-    private final PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
+
+    private final DaoFactory daoFactory = new DaoFactoryImpl();
+    private final BorderDao borderDao = daoFactory.createDao(BorderDao.class);
+    private final GameDao gameDao = daoFactory.createDao(GameDao.class);
+    private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
     private int BorderWidth;
     private int BorderHeight;
     private List<Player> allPlayers;

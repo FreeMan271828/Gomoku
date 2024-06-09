@@ -1,17 +1,17 @@
 package org.freeman.service;
 
 
-import myUtils.DependencyContainer;
-import org.freeman.dao.BorderDao;
-import org.freeman.dao.CellDao;
-import org.freeman.dao.GameDao;
-import org.freeman.dao.PlayerDao;
+import Factory.DaoFactory;
+import Factory.DaoFactoryImpl;
+import org.freeman.dao.*;
 import org.freeman.object.Border;
 import org.freeman.object.Cell;
 import org.freeman.object.Game;
 import org.freeman.object.Player;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class GameService {
@@ -26,11 +26,13 @@ public class GameService {
     private int whiteTime = 0;  // 白方剩余时间
     private String blackMessage = "无限制";  // 黑方时间信息
     private String whiteMessage = "无限制";  // 白方时间信息
-
-    private final BorderDao borderDao = DependencyContainer.get(BorderDao.class);
-    private final GameDao gameDao = DependencyContainer.get(GameDao.class);
-    private final PlayerDao playerDao = DependencyContainer.get(PlayerDao.class);
-    private final CellDao cellDao = DependencyContainer.get(CellDao.class);
+    private List<Cell> registerCells ;
+    private final DaoFactory daoFactory = new DaoFactoryImpl();
+    private final BorderDao borderDao = daoFactory.createDao(BorderDao.class);
+    private final GameDao gameDao = daoFactory.createDao(GameDao.class);
+    private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
+    private final CellDao cellDao = daoFactory.createDao(CellDao.class);
+    private final WinnerDao winnerDao = daoFactory.createDao()
 
     // 选择对局玩家
     public void setPlayerIdToGame(Player player1, Player player2){
@@ -50,6 +52,7 @@ public class GameService {
             //黑子为1
             allChess[x][y] = 1;
         }else{
+            //白子为2
             allChess[x][y] = 1;
         }
     }
@@ -58,12 +61,14 @@ public class GameService {
     public void regretChess(int x,int y){
         allChess[x][y] = 0;
     }
-    //保存棋子记录,在确认确认结束本方回合，进入对方回合时调用
-    public void loadChess(Cell cell) throws SQLException {
-       cellDao.AddCell(cell);
+    //保存棋子缓存记录,在确认确认结束本方回合，进入对方回合时调用，cell在control层实例化
+    public void registerChess(Cell cell) throws SQLException {
+       this.registerCells.add(cell);
     }
 
-    // 检查是否胜利，在
+
+
+    // 检查是否胜利，在保存棋子记录后调用
     public boolean checkWin(int x, int y) {
         int color = allChess[x][y];  // 获取当前位置的棋子颜色
         // 检查四个方向是否有五个连续的相同颜色的棋子
@@ -96,7 +101,7 @@ public class GameService {
         return count;
     }
 
-    // 重置游戏状态
+    // 重置游戏状态，单独实现一个按扭
     public void resetGame() {
         for (int i = 1; i <= 14; i++) {
             for (int j = 1; j <= 14; j++) {
@@ -110,11 +115,24 @@ public class GameService {
         blackMessage = maxTime > 0 ? formatTime(maxTime) : "无限制";  // 更新黑方时间信息
         whiteMessage = maxTime > 0 ? formatTime(maxTime) : "无限制";  // 更新白方时间信息
         canPlay = true;  // 设置游戏可以继续
+        registerCells = new ArrayList<>();
     }
 
+    public void setWinner(Player player){
+
+    }
     // 将时间格式化为 "小时:分钟:秒" 的字符串
     private String formatTime(int time) {
         return time / 3600 + ":" + (time / 60 - time / 3600 * 60) + ":" + (time - time / 60 * 60);
+    }
+
+    //保存所有缓存记录，确认保存时调用，一般是一方胜利或者主动结束游戏。
+    public void saveAllResigter() throws SQLException {
+        borderDao.AddBorder(currentGame.getBorder());
+        gameDao.newGame(currentGame.getBorder(), currentGame.getPlayer1(),currentGame.getPlayer2());
+        for (Cell registerCell : registerCells) {
+            cellDao.AddCell(registerCell);
+        }
     }
 
     // 获取棋盘状态
