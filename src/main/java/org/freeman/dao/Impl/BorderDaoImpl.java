@@ -40,7 +40,7 @@ public class BorderDaoImpl implements BorderDao {
 
     @Override
     public List<Border> GetBorders() {
-        String sql = "select * from player";
+        String sql = "select * from border";
         assert connection != null;
         return getBorderBySql(sql);
     }

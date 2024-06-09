@@ -21,7 +21,7 @@ import java.util.UUID;
 public class GomokuApp {
     private Display display;
     private Shell shell;
-    private BeforeGameService beforeGameService = new BeforeGameService();
+    private final BeforeGameService beforeGameService = new BeforeGameService();
     private GameService gameService = new GameService();
     private Map<String, UUID> players;
 
@@ -70,7 +70,11 @@ public class GomokuApp {
         startGameButton.setLayoutData(gridData);
         startGameButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
-                showGameSettingsScreen();
+                try {
+                    showGameSettingsScreen();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -94,7 +98,7 @@ public class GomokuApp {
     }
 
 
-    private void showGameSettingsScreen() {
+    private void showGameSettingsScreen() throws SQLException {
 
         this.clearComponents();
         Label boardSizeLabel = new Label(shell, SWT.NONE);
@@ -189,8 +193,9 @@ public class GomokuApp {
      * 获取玩家id和名称的对应
      * @return
      */
-    public Map<UUID,String> getPlayerNameByIdMap(){
+    public Map<UUID,String> getPlayerNameByIdMap() throws SQLException {
         beforeGameService.get_allBorders();
+        beforeGameService.get_AllPlayers();
         Map<UUID,String> Players = new HashMap<>();
         for (Player player : beforeGameService.getAllPlayers()) {
             UUID ID = player.getId();
@@ -209,12 +214,12 @@ public class GomokuApp {
         return Players;
     }
 
-    public String[] getAllPlayersName(){
+    public String[] getAllPlayersName() throws SQLException {
         Map<UUID, String> players = getPlayerNameByIdMap();
         return players.values().toArray(new String[0]);
     }
 
-    public String getPlayerNameById(String ID){
+    public String getPlayerNameById(String ID) throws SQLException {
         Map<UUID, String> players = getPlayerNameByIdMap();
         return players.get(ID);
     }

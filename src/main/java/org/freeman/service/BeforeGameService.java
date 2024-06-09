@@ -36,8 +36,7 @@ public class BeforeGameService {
     private Map<UUID,List<Game>> playersGames;
     //获取所有棋盘
     public void get_allBorders(){
-        List<Border> allBorder = borderDao.GetBorders();
-        this.allBorders = allBorder;
+        this.allBorders = borderDao.GetBorders();
     }
 
     public void setSize(int width,int height){
