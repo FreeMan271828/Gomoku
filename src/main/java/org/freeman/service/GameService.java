@@ -18,7 +18,7 @@ import java.util.UUID;
 @Data
 public class GameService {
 
-    private Game currentGame;
+    private Game currentGame = new Game();
     private int[][] allChess ;  // 棋盘，0表示空位置
     private boolean isBlack = true;  // 当前是否轮到黑方
     private boolean canPlay = true;  // 游戏是否可以继续
@@ -37,7 +37,9 @@ public class GameService {
     private final WinnerDao winnerDao = daoFactory.createDao(WinnerDao.class);
 
     // 选择对局玩家
-    public void setPlayerIdToGame(Player player1, Player player2){
+    public void setPlayerIdToGame(UUID player1Id, UUID player2Id){
+        Player player1 = playerDao.GetPlayer(player1Id);
+        Player player2 = playerDao.GetPlayer(player2Id);
         this.currentGame.setPlayer1(player1);
         this.currentGame.setPlayer2(player2);
     }
@@ -67,7 +69,6 @@ public class GameService {
     public void registerChess(Cell cell) throws SQLException {
        this.registerCells.add(cell);
     }
-
 
 
     // 检查是否胜利，在保存棋子记录后调用

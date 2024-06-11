@@ -47,7 +47,7 @@ public class GomokuApp {
         display.dispose();
     }
 
-
+    //初始化界面
     private void createInitialScreen() {
         shell.setLayout(new GridLayout(1, false));
 
@@ -97,10 +97,11 @@ public class GomokuApp {
         });
     }
 
-
+    //设置对局配置的选项
     private void showGameSettingsScreen() throws SQLException {
 
-        this.clearComponents();
+        //清空所有组件
+        clearComponents();
         Label boardSizeLabel = new Label(shell, SWT.NONE);
         boardSizeLabel.setText("选择棋盘大小:");
 
@@ -118,7 +119,7 @@ public class GomokuApp {
         player2Label.setText("选择玩家2:");
 
         Combo player2Combo = new Combo(shell, SWT.DROP_DOWN | SWT.READ_ONLY);
-        player1Combo.setItems(getAllPlayersName());
+        player2Combo.setItems(getAllPlayersName());
 
         Button backButton = new Button(shell, SWT.PUSH);
         backButton.setText("返回");
@@ -139,8 +140,16 @@ public class GomokuApp {
                 String boardSize = boardSizeCombo.getText();
                 String player1 = player1Combo.getText();
                 String player2 = player2Combo.getText();
+                Border border = getBorderByName(boardSize);
+                gameService.setBorderToGame(border);
+                try {
+                    gameService.setPlayerIdToGame(getPlayerIdByName(player1),getPlayerIdByName(player2));
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+
                 if (!boardSize.isEmpty() && !player1.isEmpty() && !player2.isEmpty()) {
-                    startGame(boardSize, player1, player2);
+                    startGame();
                 } else {
                     // 显示错误信息
                 }
@@ -149,37 +158,39 @@ public class GomokuApp {
 
         shell.layout();
     }
+
+    //历史记录的查看代码
     private void showHistoryScreen() {
-        shell.getChildren()[0].dispose();  // 清除初始界面
-        shell.setLayout(new GridLayout(1, false));
+
+        clearComponents();
 
         // 历史记录查看代码在这里
 
         shell.layout();
     }
-    private void startGame(String boardSize, String player1, String player2) {
-        shell.getChildren()[0].dispose();  // 清除设置界面
-        shell.setLayout(new GridLayout(1, false));
+    private void startGame() {
+
+        clearComponents();
+
 
         //重新渲染一个棋盘，
-        //new ChessFrame();
-
-        Button backButton = new Button(shell, SWT.PUSH);
-        backButton.setText("返回主菜单");
-        backButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
-                for (org.eclipse.swt.widgets.Control control : shell.getChildren()) {
-                    control.dispose();
-                }
-                createInitialScreen();
-                shell.layout();
-            }
-        });
+        new ChessFrame(display,shell,beforeGameService,gameService);
+//        Button backButton = new   Button(shell, SWT.PUSH);
+//        backButton.setText("返回主菜单");
+//        backButton.addSelectionListener(new SelectionAdapter() {
+//            public void widgetSelected(SelectionEvent e) {
+//                for (org.eclipse.swt.widgets.Control control : shell.getChildren()) {
+//                    control.dispose();
+//                }
+//                createInitialScreen();
+//                shell.layout();
+//            }
+//        });
 
         shell.layout();
     }
 
-// GameBoard 类将处理游戏棋盘的渲染和游戏逻辑
+
 
     //初始化界面
     private void clearComponents(){
