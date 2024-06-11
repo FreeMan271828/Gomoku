@@ -2,7 +2,7 @@ package org.freeman;
 
 import Factory.DaoFactory;
 import Factory.DaoFactoryImpl;
-import org.freeman.control.ChessFrame;
+
 import org.freeman.control.GomokuApp;
 import org.freeman.dao.*;
 import org.freeman.object.Border;

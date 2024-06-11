@@ -60,11 +60,6 @@ public class BeforeGameService {
     //获取玩家信息
     public void  get_AllPlayers() throws SQLException {
         List<Player> players = playerDao.GetPlayers();
-        if(players == null){
-            System.out.println("Players为空");
-        }else{
-            System.out.println("不会为空");
-        }
         this.allPlayers = players;
     }
 
