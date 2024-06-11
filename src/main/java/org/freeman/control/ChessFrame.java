@@ -409,6 +409,4 @@ public class ChessFrame extends JFrame implements MouseListener, Runnable {
         // TODO Auto-generated method stub
 
     }
-
-
 }
