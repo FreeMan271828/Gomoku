@@ -17,12 +17,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.freeman.service.BeforeGameService;
 import org.freeman.service.GameService;
 
+import java.util.List;
+
 public class ChessFrame {
 
     private Display display;
     private Shell shell;
     private BeforeGameService beforeGameService;
-    private GameService gameService;
+    private GameService gameService = new GameService();
     private Image bgimage;
     private boolean isBlack = true;
     private boolean canPlay = true;
@@ -32,20 +34,22 @@ public class ChessFrame {
     private int whiteTime = 0;
     private String blackMessage = "无限制";
     private String whiteMessage = "无限制";
-    private int borderHeight = gameService.getCurrentGame().getBorder().getLength();
-    private int borderWidth = gameService.getCurrentGame().getBorder().getWidth();
-    private int [][] allChess = new int[borderHeight][borderHeight];
+    private int borderHeight ;
+    private int borderWidth ;
+    private int [][] allChess;
 
     public ChessFrame(Display display,Shell shell,BeforeGameService beforeGameService,GameService gameService) {
 
         this.beforeGameService = beforeGameService;
+        this.borderHeight = gameService.getCurrentGame().getBorder().getLength();
+        this.borderWidth = gameService.getCurrentGame().getBorder().getWidth();
         this.gameService = gameService;
         this.display = display;
         this.shell = shell;
         shell.setText("五子棋");
         shell.setSize(1080, 850);
         shell.setLayout(new FillLayout());
-
+        allChess = new int[borderHeight][borderHeight];
 
         shell.addPaintListener(new PaintListener() {
             @Override
@@ -123,7 +127,7 @@ public class ChessFrame {
 
 
         // 绘制棋盘
-        for (int i = 0; i <= borderHeight-3; i++) {
+        for (int i = 0; i <= 9; i++) {
             e.gc.drawLine(150 + i * 50, 125, 150 + i * 50, 775);
             e.gc.drawLine(150, 125 + i * 50, 800, 125 + i * 50);
         }
@@ -131,8 +135,8 @@ public class ChessFrame {
 
 
         // 绘制所有棋子
-        for (int i = 1; i <= borderHeight-2; i++) {
-            for (int j = 1; j <= borderHeight-2; j++) {
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
                 if (allChess[i][j] == 1) {
                     // 黑棋子
                     int tempx = (i - 1) * 50 + 150;
@@ -231,7 +235,7 @@ public class ChessFrame {
 
     private void reStart() {
 
-        for (int i = 0; i <= borderHeight-1; i++) {
+        for (int i = 0; i <= 15; i++) {
             for (int j = 0; j <= 15; j++) {
                 allChess[i][j] = 0;
             }

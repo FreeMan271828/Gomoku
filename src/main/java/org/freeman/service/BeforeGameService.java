@@ -1,7 +1,6 @@
 package org.freeman.service;
 
 import Factory.DaoFactory;
-import Factory.DaoFactoryImpl;
 import lombok.Data;
 import org.freeman.dao.BorderDao;
 import org.freeman.dao.GameDao;
@@ -22,11 +21,10 @@ import java.util.stream.Collectors;
 @Data
 public class BeforeGameService {
 
-    private final DaoFactory daoFactory = new DaoFactoryImpl();
-    private final BorderDao borderDao = daoFactory.createDao(BorderDao.class);
-    private final GameDao gameDao = daoFactory.createDao(GameDao.class);
-    private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
-    private final WinnerDao winnerDao = daoFactory.createDao(WinnerDao.class);
+    private final BorderDao borderDao = DaoFactory.createDao(BorderDao.class);
+    private final GameDao gameDao = DaoFactory.createDao(GameDao.class);
+    private final PlayerDao playerDao = DaoFactory.createDao(PlayerDao.class);
+    private final WinnerDao winnerDao = DaoFactory.createDao(WinnerDao.class);
     private int BorderWidth;
     private int BorderHeight;
     private List<Player> allPlayers;

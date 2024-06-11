@@ -1,7 +1,6 @@
 package org.freeman.dao.Impl;
 
 import Factory.DaoFactory;
-import Factory.DaoFactoryImpl;
 import myUtils.*;
 import org.freeman.dao.CellDao;
 import org.freeman.dao.GameDao;
@@ -17,15 +16,13 @@ import java.util.UUID;
 
 public class CellDaoImpl implements CellDao {
 
-    private final DaoFactory daoFactory = new DaoFactoryImpl();
-
     private final MyLog LOG = MyLog.getInstance();
 
     private final Connection connection = MyConnnect.getConnection();
 
-    private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
+    private final PlayerDao playerDao = DaoFactory.createDao(PlayerDao.class);
 
-    private final GameDao gameDao =daoFactory.createDao(GameDao.class);
+    private final GameDao gameDao = DaoFactory.createDao(GameDao.class);
 
     @Override
     public Cell AddCell(Cell cell) throws SQLException {

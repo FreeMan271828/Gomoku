@@ -2,7 +2,6 @@ package org.freeman.service;
 
 
 import Factory.DaoFactory;
-import Factory.DaoFactoryImpl;
 import lombok.Data;
 import org.freeman.dao.*;
 import org.freeman.object.Border;
@@ -29,12 +28,11 @@ public class GameService {
     private String blackMessage = "无限制";  // 黑方时间信息
     private String whiteMessage = "无限制";  // 白方时间信息
     private List<Cell> registerCells ;
-    private final DaoFactory daoFactory = new DaoFactoryImpl();
-    private final BorderDao borderDao = daoFactory.createDao(BorderDao.class);
-    private final GameDao gameDao = daoFactory.createDao(GameDao.class);
-    private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
-    private final CellDao cellDao = daoFactory.createDao(CellDao.class);
-    private final WinnerDao winnerDao = daoFactory.createDao(WinnerDao.class);
+    private final BorderDao borderDao = DaoFactory.createDao(BorderDao.class);
+    private final GameDao gameDao = DaoFactory.createDao(GameDao.class);
+    private final PlayerDao playerDao = DaoFactory.createDao(PlayerDao.class);
+    private final CellDao cellDao = DaoFactory.createDao(CellDao.class);
+    private final WinnerDao winnerDao = DaoFactory.createDao(WinnerDao.class);
 
     // 选择对局玩家
     public void setPlayerIdToGame(UUID player1Id, UUID player2Id){

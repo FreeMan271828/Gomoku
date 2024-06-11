@@ -1,7 +1,6 @@
 package org.freeman.dao.Impl;
 
 import Factory.DaoFactory;
-import Factory.DaoFactoryImpl;
 import myUtils.MyConnnect;
 import myUtils.MyDate;
 import myUtils.MyLog;
@@ -21,9 +20,8 @@ import java.util.UUID;
 
 public class WinnerDaoImpl implements WinnerDao {
 
-    private final DaoFactory daoFactory = new DaoFactoryImpl();
-    private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
-    private final GameDao gameDao = daoFactory.createDao(GameDao.class);
+    private final PlayerDao playerDao = DaoFactory.createDao(PlayerDao.class);
+    private final GameDao gameDao = DaoFactory.createDao(GameDao.class);
 
     private final Connection connection = MyConnnect.getConnection();
 

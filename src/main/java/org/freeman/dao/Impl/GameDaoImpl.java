@@ -1,9 +1,7 @@
 package org.freeman.dao.Impl;
 import Factory.DaoFactory;
-import Factory.DaoFactoryImpl;
 import myUtils.*;
 import org.freeman.dao.BorderDao;
-import org.freeman.dao.CellDao;
 import org.freeman.dao.GameDao;
 import org.freeman.dao.PlayerDao;
 import org.freeman.object.Border;
@@ -17,15 +15,13 @@ import java.util.UUID;
 
 public class GameDaoImpl implements GameDao {
 
-    private final DaoFactory daoFactory = new DaoFactoryImpl();
-
     private final MyLog LOG = MyLog.getInstance();
 
     private final Connection connection = MyConnnect.getConnection();
 
-    private final BorderDao borderDao = daoFactory.createDao(BorderDao.class);
+    private final BorderDao borderDao = DaoFactory.createDao(BorderDao.class);
 
-    private final PlayerDao playerDao = daoFactory.createDao(PlayerDao.class);
+    private final PlayerDao playerDao = DaoFactory.createDao(PlayerDao.class);
 
     @Override
     public Game newGame(Border border, Player player1, Player player2) throws SQLException {
