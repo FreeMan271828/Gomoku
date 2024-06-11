@@ -5,11 +5,8 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
@@ -17,15 +14,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.freeman.service.BeforeGameService;
 import org.freeman.service.GameService;
 
-import java.util.List;
-
 public class ChessFrame {
 
     private Display display;
     private Shell shell;
     private BeforeGameService beforeGameService;
-    private GameService gameService = new GameService();
-    private Image bgimage;
+    private GameService gameService;
     private boolean isBlack = true;
     private boolean canPlay = true;
     private String message = "黑方先行";
@@ -34,11 +28,11 @@ public class ChessFrame {
     private int whiteTime = 0;
     private String blackMessage = "无限制";
     private String whiteMessage = "无限制";
-    private int borderHeight ;
-    private int borderWidth ;
-    private int [][] allChess;
+    private int borderHeight;
+    private int borderWidth;
+    private int[][] allChess;
 
-    public ChessFrame(Display display,Shell shell,BeforeGameService beforeGameService,GameService gameService) {
+    public ChessFrame(Display display, Shell shell, BeforeGameService beforeGameService, GameService gameService) {
 
         this.beforeGameService = beforeGameService;
         this.borderHeight = gameService.getCurrentGame().getBorder().getLength();
@@ -49,7 +43,7 @@ public class ChessFrame {
         shell.setText("五子棋");
         shell.setSize(1080, 850);
         shell.setLayout(new FillLayout());
-        allChess = new int[borderHeight][borderHeight];
+        allChess = new int[borderHeight][borderWidth];
 
         shell.addPaintListener(new PaintListener() {
             @Override
@@ -73,14 +67,6 @@ public class ChessFrame {
             }
         });
 
-        // Load background image
-//        try {
-//            ImageData imageData = new ImageData("path/to/your/background/image.jpg");
-//            bgimage = new Image(display, imageData);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
         shell.open();
         while (!shell.isDisposed()) {
             if (!display.readAndDispatch()) {
@@ -91,7 +77,9 @@ public class ChessFrame {
     }
 
     private void drawGame(PaintEvent e) {
-//        display.dispose()
+        int cellSize = Math.min((800 - 150) / borderWidth, (775 - 125) / borderHeight); // 动态计算每个格子的大小
+        int xOffset = 150;
+        int yOffset = 125;
 
         FontData fontData = new FontData("黑体", 50, SWT.BOLD);
         Font font = new Font(display, fontData);
@@ -124,45 +112,49 @@ public class ChessFrame {
         e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
         e.gc.setFont(new Font(display, "黑体", 10, SWT.BOLD));
 
-
-
         // 绘制棋盘
-        for (int i = 0; i <= 9; i++) {
-            e.gc.drawLine(150 + i * 50, 125, 150 + i * 50, 775);
-            e.gc.drawLine(150, 125 + i * 50, 800, 125 + i * 50);
+        for (int i = 0; i <= borderWidth; i++) {
+            e.gc.drawLine(xOffset + i * cellSize, yOffset, xOffset + i * cellSize, yOffset + cellSize * (borderHeight - 1));
+        }
+        for (int i = 0; i <= borderHeight; i++) {
+            e.gc.drawLine(xOffset, yOffset + i * cellSize, xOffset + cellSize * (borderWidth - 1), yOffset + i * cellSize);
         }
 
-
-
         // 绘制所有棋子
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
+        for (int i = 0; i < borderWidth; i++) {
+            for (int j = 0; j < borderHeight; j++) {
                 if (allChess[i][j] == 1) {
+                    // 黑棋
                     // 黑棋子
-                    int tempx = (i - 1) * 50 + 150;
-                    int tempy = (j - 1) * 50 + 125;
-                    e.gc.fillOval(tempx - 20, tempy - 20, 40, 40);
+                    int tempx = xOffset + i * cellSize;
+                    int tempy = yOffset + j * cellSize;
+                    e.gc.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
+                    e.gc.fillOval(tempx - cellSize / 2, tempy - cellSize / 2, cellSize, cellSize);
                 }
                 if (allChess[i][j] == 2) {
                     // 白棋子
-                    int tempx = (i - 1) * 50 + 150;
-                    int tempy = (j - 1) * 50 + 125;
+                    int tempx = xOffset + i * cellSize;
+                    int tempy = yOffset + j * cellSize;
                     e.gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
-                    e.gc.fillOval(tempx - 20, tempy - 20, 40, 40);
+                    e.gc.fillOval(tempx - cellSize / 2, tempy - cellSize / 2, cellSize, cellSize);
                     e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-                    e.gc.drawOval(tempx - 20, tempy - 20, 40, 40);
+                    e.gc.drawOval(tempx - cellSize / 2, tempy - cellSize / 2, cellSize, cellSize);
                 }
             }
         }
     }
 
     private void handleMouseClick(MouseEvent e) {
+        int cellSize = Math.min((800 - 150) / borderWidth, (775 - 125) / borderHeight);
+        int xOffset = 150;
+        int yOffset = 125;
+
         if (canPlay) {
             int nx = e.x;
             int ny = e.y;
-            if (nx >= 150 && nx <= 800 && ny >= 125 && ny <= 775) {
-                int x = Math.round((nx - 150) / 50) + 1;
-                int y = Math.round((ny - 125) / 50) + 1;
+            if (nx >= xOffset && nx <= xOffset + cellSize * (borderWidth - 1) && ny >= yOffset && ny <= yOffset + cellSize * (borderHeight - 1)) {
+                int x = (nx - xOffset + cellSize / 2) / cellSize;
+                int y = (ny - yOffset + cellSize / 2) / cellSize;
                 if (allChess[x][y] == 0) {
                     if (isBlack) {
                         allChess[x][y] = 1;
@@ -231,12 +223,9 @@ public class ChessFrame {
         }
     }
 
-
-
     private void reStart() {
-
-        for (int i = 0; i <= 15; i++) {
-            for (int j = 0; j <= 15; j++) {
+        for (int i = 0; i < borderWidth; i++) {
+            for (int j = 0; j < borderHeight; j++) {
                 allChess[i][j] = 0;
             }
         }
