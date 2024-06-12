@@ -82,24 +82,35 @@ public class GameService {
         return false;
     }
 
+
     // 辅助方法，用于计算指定方向上连续相同颜色的棋子数
     private int checkCount(int x, int y, int xChange, int yChange, int color) {
         int count = 1;  // 计数器
-        int tempX = xChange, tempY = yChange;
+
         // 检查正方向
-        while (color == allChess[x + xChange][y + yChange]) {
+        int tempX = x + xChange;
+        int tempY = y + yChange;
+        while (isValidPosition(tempX, tempY) && color == allChess[tempX][tempY]) {
             count++;
-            if (xChange != 0) xChange++;
-            if (yChange != 0) yChange = yChange > 0 ? yChange + 1 : yChange - 1;
+            tempX += xChange;
+            tempY += yChange;
         }
-        xChange = tempX; yChange = tempY;
+
         // 检查反方向
-        while (color == allChess[x - xChange][y - yChange]) {
+        tempX = x - xChange;
+        tempY = y - yChange;
+        while (isValidPosition(tempX, tempY) && color == allChess[tempX][tempY]) {
             count++;
-            if (xChange != 0) xChange++;
-            if (yChange != 0) yChange = yChange > 0 ? yChange + 1 : yChange - 1;
+            tempX -= xChange;
+            tempY -= yChange;
         }
+
         return count;
+    }
+
+    // 检查坐标是否在棋盘范围内
+    private boolean isValidPosition(int x, int y) {
+        return x >= 0 && x < allChess.length && y >= 0 && y < allChess[0].length;
     }
 
     // 重置游戏状态，单独实现一个按扭

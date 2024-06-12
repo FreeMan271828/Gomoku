@@ -10,9 +10,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.freeman.object.Border;
 import org.freeman.object.Player;
-import org.freeman.service.BeforeGameService;
-import org.freeman.service.GameService;
-
+import org.freeman.service.*;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +20,7 @@ public class GomokuApp {
     private Display display;
     private Shell shell;
     private final BeforeGameService beforeGameService = new BeforeGameService();
-    private GameService gameService = new GameService();
+    private final GameService gameService = new GameService();
     private Map<String, UUID> players;
 
 //    public static void main(String[] args) {
@@ -102,9 +100,9 @@ public class GomokuApp {
 
         //清空所有组件
         clearComponents();
+
         Label boardSizeLabel = new Label(shell, SWT.NONE);
         boardSizeLabel.setText("选择棋盘大小:");
-
 
         Combo boardSizeCombo = new Combo(shell, SWT.DROP_DOWN | SWT.READ_ONLY);
         boardSizeCombo.setItems(getAllBorderType());
@@ -120,6 +118,18 @@ public class GomokuApp {
 
         Combo player2Combo = new Combo(shell, SWT.DROP_DOWN | SWT.READ_ONLY);
         player2Combo.setItems(getAllPlayersName());
+
+        // 注册按钮
+        Button registerButton = new Button(shell, SWT.PUSH);
+        registerButton.setText("注册用户");
+
+        // 注册按钮监听事件
+        registerButton.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                new RegisterFrame(display,shell);
+            }
+        });
 
         Button backButton = new Button(shell, SWT.PUSH);
         backButton.setText("返回");
@@ -151,7 +161,7 @@ public class GomokuApp {
                 if (!boardSize.isEmpty() && !player1.isEmpty() && !player2.isEmpty()) {
                     startGame();
                 } else {
-                    // 显示错误信息
+                    //TODO 显示错误信息
                 }
             }
         });
@@ -187,7 +197,7 @@ public class GomokuApp {
 //            }
 //        });
 
-        shell.layout();
+//        shell.layout();
     }
 
 

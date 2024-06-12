@@ -11,8 +11,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.freeman.service.BeforeGameService;
-import org.freeman.service.GameService;
+import org.freeman.service.*;
 
 public class ChessFrame {
 
