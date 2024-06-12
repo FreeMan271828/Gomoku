@@ -18,6 +18,7 @@ import java.util.UUID;
 public class GameService {
 
     private Game currentGame = new Game();
+    private Player winner = new Player();
     private int[][] allChess ;  // 棋盘，0表示空位置
     private boolean isBlack = true;  // 当前是否轮到黑方
     private boolean canPlay = true;  // 游戏是否可以继续
@@ -27,7 +28,7 @@ public class GameService {
     private int whiteTime = 0;  // 白方剩余时间
     private String blackMessage = "无限制";  // 黑方时间信息
     private String whiteMessage = "无限制";  // 白方时间信息
-    private List<Cell> registerCells ;
+    private List<Cell> registerCells = new ArrayList<>();
     private final BorderDao borderDao = DaoFactory.createDao(BorderDao.class);
     private final GameDao gameDao = DaoFactory.createDao(GameDao.class);
     private final PlayerDao playerDao = DaoFactory.createDao(PlayerDao.class);
@@ -49,15 +50,15 @@ public class GameService {
     }
 
     //落子功能
-    public void putChess(int x,int y,boolean isBlack){
-        if(isBlack){
-            //黑子为1
-            allChess[x][y] = 1;
-        }else{
-            //白子为2
-            allChess[x][y] = 1;
-        }
-    }
+//    public void putChess(int x,int y,boolean isBlack){
+//        if(isBlack){
+//            //黑子为1
+//            allChess[x][y] = 1;
+//        }else{
+//            //白子为2
+//            allChess[x][y] = 1;
+//        }
+//    }
 
     //悔棋，玩家可以在本方回合结束之前任意悔棋，在确认结束本回合后将无法悔棋
     public void regretChess(int x,int y){
@@ -127,13 +128,13 @@ public class GameService {
         blackMessage = maxTime > 0 ? formatTime(maxTime) : "无限制";  // 更新黑方时间信息
         whiteMessage = maxTime > 0 ? formatTime(maxTime) : "无限制";  // 更新白方时间信息
         canPlay = true;  // 设置游戏可以继续
-        currentGame = new Game();
+        winner = new Player();
         registerCells = new ArrayList<>();
     }
 
     //在决出胜负后，同保存缓存记录一块调用
     public void setWinner(Player player) throws SQLException {
-        winnerDao.AddWinner(player,currentGame);
+        winner = player;
     }
     // 将时间格式化为 "小时:分钟:秒" 的字符串
     private String formatTime(int time) {
@@ -147,6 +148,7 @@ public class GameService {
         for (Cell registerCell : registerCells) {
             cellDao.AddCell(registerCell);
         }
+        winnerDao.AddWinner(winner,currentGame);
     }
 
 }
