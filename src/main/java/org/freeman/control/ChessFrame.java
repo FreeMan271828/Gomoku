@@ -11,16 +11,18 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.freeman.object.Cell;
+import org.freeman.object.Game;
+import org.freeman.object.Player;
 import org.freeman.service.*;
 import java.sql.SQLException;
-import java.util.UUID;
 
 public class ChessFrame {
 
-    private Display display;
-    private Shell shell;
-    private BeforeGameService beforeGameService;
-    private GameService gameService;
+    private final Display display;
+    private final Shell shell;
+    private final BeforeGameService beforeGameService;
+    private final GameService gameService;
     private boolean isBlack = true;
     private boolean canPlay = true;
     private String message = "黑方先行";
