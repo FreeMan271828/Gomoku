@@ -19,10 +19,17 @@ import java.sql.SQLException;
 
 public class RegisterFrame{
 
+
     private final PlayerDao playerDao;
 
-    public RegisterFrame(Display display, Shell shell) {
+    private final Shell shell;
+
+    public RegisterFrame(Display display) {
+        this.shell = new Shell(display);
         this.playerDao = DaoFactory.createDao(PlayerDao.class);
+
+        //清空所有组件
+        clearComponents();
 
         shell.setText("添加用户");
         shell.setLayout(new GridLayout(2, false));
@@ -41,6 +48,17 @@ public class RegisterFrame{
         addButton.setText("添加");
         GridData buttonData = new GridData(SWT.CENTER, SWT.CENTER, false, false);
         addButton.setLayoutData(buttonData);
+
+        Button backButton = new Button(shell, SWT.PUSH);
+        backButton.setText("返回");
+        backButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                for (org.eclipse.swt.widgets.Control control : shell.getChildren()) {
+                    control.dispose();
+                }
+                shell.close();
+            }
+        });
 
         // 添加按钮监听事件
         addButton.addSelectionListener(new SelectionAdapter() {
@@ -86,4 +104,13 @@ public class RegisterFrame{
             }
         }
     }
+
+    //初始化界面
+    private void clearComponents(){
+        for (org.eclipse.swt.widgets.Control control : shell.getChildren()) {
+            control.dispose();
+        }
+        shell.setLayout(new GridLayout(2, false));
+    }
+
 }

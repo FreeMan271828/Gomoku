@@ -3,6 +3,7 @@ package org.freeman.control;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
@@ -33,6 +34,9 @@ public class GomokuApp {
         shell.setText("五子棋游戏");
         shell.setSize(1080, 850);
         shell.setLayout(new GridLayout(1, false));
+        // 设置背景颜色
+        Color background = new Color(display, 240, 240, 240);
+        shell.setBackground(background);
 
         createInitialScreen();
 
@@ -43,56 +47,6 @@ public class GomokuApp {
             }
         }
         display.dispose();
-    }
-
-    //初始化界面
-    private void createInitialScreen() {
-        shell.setLayout(new GridLayout(1, false));
-
-        // 设置标题
-        Label titleLabel = new Label(shell, SWT.CENTER);
-        titleLabel.setText("五子棋游戏");
-        FontData fontData = new FontData("隶书", 24, SWT.BOLD);  // 设置字体为隶书，大小24，加粗
-        Font titleFont = new Font(display, fontData);
-        titleLabel.setFont(titleFont);
-        GridData titleGridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
-        titleGridData.verticalIndent = 120;  // 设置标题与按钮之间的间距
-        titleLabel.setLayoutData(titleGridData);
-
-        GridData gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
-        gridData.widthHint = 200;  // 设置按钮宽度
-        gridData.heightHint = 50;  // 设置按钮高度
-
-        Button startGameButton = new Button(shell, SWT.PUSH);
-        startGameButton.setText("开始游戏");
-        startGameButton.setLayoutData(gridData);
-        startGameButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
-                try {
-                    showGameSettingsScreen();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-
-        Button viewHistoryButton = new Button(shell, SWT.PUSH);
-        viewHistoryButton.setText("查看历史记录");
-        viewHistoryButton.setLayoutData(gridData);
-        viewHistoryButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
-                showHistoryScreen();
-            }
-        });
-
-        Button exitButton = new Button(shell, SWT.PUSH);
-        exitButton.setText("退出");
-        exitButton.setLayoutData(gridData);
-        exitButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
-                shell.dispose();
-            }
-        });
     }
 
     //设置对局配置的选项
@@ -119,30 +73,6 @@ public class GomokuApp {
         Combo player2Combo = new Combo(shell, SWT.DROP_DOWN | SWT.READ_ONLY);
         player2Combo.setItems(getAllPlayersName());
 
-        // 注册按钮
-        Button registerButton = new Button(shell, SWT.PUSH);
-        registerButton.setText("注册用户");
-
-        // 注册按钮监听事件
-        registerButton.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                new RegisterFrame(display,shell);
-            }
-        });
-
-        Button backButton = new Button(shell, SWT.PUSH);
-        backButton.setText("返回");
-        backButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
-                for (org.eclipse.swt.widgets.Control control : shell.getChildren()) {
-                    control.dispose();
-                }
-                createInitialScreen();
-                shell.layout();
-            }
-        });
-
         Button confirmButton = new Button(shell, SWT.PUSH);
         confirmButton.setText("确认");
         confirmButton.addSelectionListener(new SelectionAdapter() {
@@ -163,6 +93,30 @@ public class GomokuApp {
                 } else {
                     //TODO 显示错误信息
                 }
+            }
+        });
+
+        // 注册按钮
+        Button registerButton = new Button(shell, SWT.PUSH);
+        registerButton.setText("注册用户");
+
+        // 注册按钮监听事件
+        registerButton.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                new RegisterFrame(display);
+            }
+        });
+
+        Button backButton = new Button(shell, SWT.PUSH);
+        backButton.setText("返回");
+        backButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                for (org.eclipse.swt.widgets.Control control : shell.getChildren()) {
+                    control.dispose();
+                }
+                createInitialScreen();
+                shell.layout();
             }
         });
 
@@ -275,4 +229,54 @@ public class GomokuApp {
                 .orElseThrow(() -> new IllegalArgumentException("No border found with the specified dimensions."));
     }
 
+    //初始化界面
+    public void createInitialScreen() {
+        shell.setLayout(new GridLayout(1, false));
+
+        // 设置标题
+        Label titleLabel = new Label(shell, SWT.CENTER);
+        titleLabel.setText("五子棋游戏");
+        FontData fontData = new FontData("隶书", 24, SWT.BOLD);  // 设置字体为隶书，大小24，加粗
+        Font titleFont = new Font(display, fontData);
+        titleLabel.setFont(titleFont);
+        GridData titleGridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
+        titleGridData.verticalIndent = 120;  // 设置标题与按钮之间的间距
+        titleLabel.setLayoutData(titleGridData);
+
+        GridData gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
+        gridData.widthHint = 200;  // 设置按钮宽度
+        gridData.heightHint = 50;  // 设置按钮高度
+
+        Button startGameButton = new Button(shell, SWT.PUSH);
+        startGameButton.setText("开始游戏");
+        startGameButton.setLayoutData(gridData);
+        startGameButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                try {
+                    showGameSettingsScreen();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
+        Button viewHistoryButton = new Button(shell, SWT.PUSH);
+        viewHistoryButton.setText("查看历史记录");
+        viewHistoryButton.setLayoutData(gridData);
+        viewHistoryButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                showHistoryScreen();
+            }
+        });
+
+        Button exitButton = new Button(shell, SWT.PUSH);
+        exitButton.setText("退出");
+        exitButton.setLayoutData(gridData);
+        exitButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                shell.dispose();
+            }
+        });
+    }
 }
+
