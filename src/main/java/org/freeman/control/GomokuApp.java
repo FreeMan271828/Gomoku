@@ -81,6 +81,7 @@ public class GomokuApp {
                 String player1 = player1Combo.getText();
                 String player2 = player2Combo.getText();
                 Border border = getBorderByName(boardSize);
+                gameService.setUUID();
                 gameService.setBorderToGame(border);
                 try {
                     gameService.setPlayerIdToGame(getPlayerIdByName(player1),getPlayerIdByName(player2));

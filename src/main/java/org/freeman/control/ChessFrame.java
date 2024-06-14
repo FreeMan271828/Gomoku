@@ -42,7 +42,7 @@ public class ChessFrame {
         this.beforeGameService = beforeGameService;
         this.borderHeight = gameService.getCurrentGame().getBorder().getLength();
         this.borderWidth = gameService.getCurrentGame().getBorder().getWidth();
-        this.gameService = gameService;
+        this.gameService = new GameService();
         this.display = display;
         this.shell = shell;
         this.isSave = 0;

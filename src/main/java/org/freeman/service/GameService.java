@@ -3,6 +3,7 @@ package org.freeman.service;
 
 import Factory.DaoFactory;
 import lombok.Data;
+import myUtils.MyUuid;
 import org.freeman.dao.*;
 import org.freeman.object.Border;
 import org.freeman.object.Cell;
@@ -47,6 +48,10 @@ public class GameService {
         this.currentGame.setBorder(currentBorder);
         int[][] chessAll = new int[currentBorder.getWidth()][currentBorder.getLength()];
         this.allChess = chessAll;
+    }
+    //分配uuid
+    public void setUUID(){
+        this.currentGame.setId(UUID.fromString(MyUuid.getUuid()));
     }
 
     //落子功能
