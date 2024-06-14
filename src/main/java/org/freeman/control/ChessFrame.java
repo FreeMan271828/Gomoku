@@ -109,7 +109,7 @@ public class ChessFrame {
         e.gc.setFont(font);
         e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
         e.gc.drawText("开始游戏", 910, 130);
-        e.gc.drawText("游戏说明", 910, 240);
+        e.gc.drawText("保存游戏", 910, 240);
         e.gc.drawText("退出游戏", 910, 590);
         e.gc.drawText("认输", 940, 470);
         e.gc.drawText("关于", 940, 360);
@@ -220,7 +220,7 @@ public class ChessFrame {
                 gameService.resetGame();
             }
         }
-        // 判断是否单击了游戏说明
+        // 判断是否单击了保存
         if (e.x >= 900 && e.x <= 1050 && e.y >= 220 && e.y <= 270) {
             isSaveBox();
             shell.dispose();
@@ -284,10 +284,11 @@ public class ChessFrame {
             saveBox.setMessage("是否保存当前对局？");
             int result = saveBox.open();
             if (result == SWT.YES) {
+                isSave = 0;
                 saveGame();
             }
         }
-        return;
+
     }
 
     private void saveGame() throws SQLException {

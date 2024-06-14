@@ -21,7 +21,7 @@ public class GameDaoImpl implements GameDao {
 
     private final BorderDao borderDao = DaoFactory.createDao(BorderDao.class);
 
-    private final PlayerDao playerDao = DaoFactory.createDao(PlayerDao.class);
+    private PlayerDao playerDao = DaoFactory.createDao(PlayerDao.class);
 
     @Override
     public Game newGame(Border border, Player player1, Player player2) throws SQLException {
@@ -29,12 +29,13 @@ public class GameDaoImpl implements GameDao {
         if(border==null || player1==null || player2==null){ LOG.error("信息不全，新建游戏错误"); return null; }
         String sql = "INSERT INTO game VALUES(?,?,?,?,?,?,?)";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, MyUuid.getUuid());          ps.setString(2,border.getId().toString());
+        String id = MyUuid.getUuid();
+        ps.setString(1, id);          ps.setString(2,border.getId().toString());
         ps.setString(3,player1.getId().toString()); ps.setString(4,player2.getId().toString());
         ps.setString(5, String.valueOf(0));      ps.setString(6, MyDate.getNowInDateTime());
         ps.setString(7, MyDate.getNowInDateTime());
         ps.executeUpdate();
-        return null;
+        return GetGame(UUID.fromString(id));
     }
 
     @Override
@@ -91,6 +92,7 @@ public class GameDaoImpl implements GameDao {
         List<Game> games = new ArrayList<>();
 
         try (ResultSet rs = connection.prepareStatement(sql).executeQuery()) {
+            playerDao = DaoFactory.createDao(PlayerDao.class);
             while (rs.next()) {
                 Game game = new Game();
                 game.setId(UUID.fromString(rs.getString("id")));
