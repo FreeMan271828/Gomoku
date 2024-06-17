@@ -1,4 +1,6 @@
 package org.freeman.service;
+
+
 import Factory.DaoFactory;
 import lombok.Data;
 import myUtils.MyUuid;
@@ -47,11 +49,6 @@ public class GameService {
         int[][] chessAll = new int[currentBorder.getWidth()][currentBorder.getLength()];
         this.allChess = chessAll;
     }
-    //分配uuid
-    public void setUUID(){
-        this.currentGame.setId(UUID.fromString(MyUuid.getUuid()));
-    }
-
     //落子功能
 //    public void putChess(int x,int y,boolean isBlack){
 //        if(isBlack){
@@ -146,12 +143,15 @@ public class GameService {
 
     //保存所有缓存记录，确认保存时调用，一般是一方胜利或者主动结束游戏。
     public void saveAllResigter() throws SQLException {
-        currentGame.setBorder(borderDao.AddBorder(currentGame.getBorder()));
-        currentGame = gameDao.newGame(currentGame.getBorder(), currentGame.getPlayer1(),currentGame.getPlayer2());
+
+//        currentGame.setBorder( borderDao.AddBorder(currentGame.getBorder()));
+        Game game = gameDao.newGame(currentGame.getBorder(), currentGame.getPlayer1(),currentGame.getPlayer2());
+        setCurrentGame(game);
         for (Cell registerCell : registerCells) {
+            registerCell.setGame(game);
             cellDao.AddCell(registerCell);
         }
-        winnerDao.AddWinner(winner,currentGame);
+        boolean isSccess = winnerDao.AddWinner(winner,currentGame);
     }
 
 }

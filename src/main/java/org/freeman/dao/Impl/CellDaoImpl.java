@@ -32,9 +32,9 @@ public class CellDaoImpl implements CellDao {
         if (cell.getX()==null) {LOG.error("棋子未指定横坐标"); return null;}
         if(cell.getY()==null) { LOG.error("棋子未指定纵坐标"); return null; }
 
-        String sql = String.format("INSERT INTO CELL VALUES(" +
+        String sql = String.format("INSERT INTO CELL() VALUES(" +
                 "'%s','%s','%d','%d','%s','%s');",
-                MyUuid.getUuid(),cell.getGame().getId(),
+                cell.getPlayer().getId(),cell.getGame().getId(),
                 cell.getX(),cell.getY(), MyDate.getNowInDateTime(),MyDate.getNowInDateTime());
         int affectedRow = connection.createStatement().executeUpdate(sql);
 
