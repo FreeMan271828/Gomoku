@@ -1,6 +1,4 @@
 package org.freeman.service;
-
-
 import Factory.DaoFactory;
 import lombok.Data;
 import myUtils.MyUuid;
@@ -148,8 +146,8 @@ public class GameService {
 
     //保存所有缓存记录，确认保存时调用，一般是一方胜利或者主动结束游戏。
     public void saveAllResigter() throws SQLException {
-        borderDao.AddBorder(currentGame.getBorder());
-        gameDao.newGame(currentGame.getBorder(), currentGame.getPlayer1(),currentGame.getPlayer2());
+        currentGame.setBorder(borderDao.AddBorder(currentGame.getBorder()));
+        currentGame = gameDao.newGame(currentGame.getBorder(), currentGame.getPlayer1(),currentGame.getPlayer2());
         for (Cell registerCell : registerCells) {
             cellDao.AddCell(registerCell);
         }
