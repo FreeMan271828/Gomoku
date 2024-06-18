@@ -13,19 +13,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.freeman.dao.BorderDao;
 import org.freeman.dao.PlayerDao;
+import org.freeman.object.Border;
 import org.freeman.object.Player;
 
 import java.sql.SQLException;
 
-public class RegisterFrame {
+public class AddBorderFrame {
 
-    private final PlayerDao playerDao;
+    private final BorderDao borderDao;
     private  Shell shell;
 
-    public RegisterFrame(Display display) {
+    public AddBorderFrame(Display display) {
         this.shell = new Shell(display);
-        shell.setText("添加用户");
+        shell.setText("添加棋盘");
         shell.setSize(1080, 850); // 设置窗口大小
 
 
@@ -33,7 +35,7 @@ public class RegisterFrame {
         shell.setLocation((display.getBounds().width - shell.getSize().x) / 2,
                 (display.getBounds().height - shell.getSize().y) / 2);
 
-        this.playerDao = DaoFactory.createDao(PlayerDao.class);
+        this.borderDao = DaoFactory.createDao(BorderDao.class);
 
         // 清空所有组件
         clearComponents();
@@ -41,16 +43,26 @@ public class RegisterFrame {
         shell.setLayout(new GridLayout(2, false));
 
         // 姓名标签
-        Label nameLabel = new Label(shell, SWT.NONE);
-        nameLabel.setText("姓名：");
-        nameLabel.setFont(display.getSystemFont());
+        Label heightLabel = new Label(shell, SWT.NONE);
+        heightLabel.setText("高：");
+        heightLabel.setFont(display.getSystemFont());
 
         // 姓名输入框
-        Text nameText = new Text(shell, SWT.BORDER);
-        GridData nameData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-        nameData.widthHint = 200; // 设置宽度
-        nameText.setLayoutData(nameData);
-        nameText.setFont(display.getSystemFont());
+        Text heightText = new Text(shell, SWT.BORDER);
+        GridData heightData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+        heightData.widthHint = 200; // 设置宽度
+        heightText.setLayoutData(heightData);
+        heightText.setFont(display.getSystemFont());
+
+        Label widthLabel = new Label(shell, SWT.NONE);
+        widthLabel.setText("宽：");
+        widthLabel.setFont(display.getSystemFont());
+
+        Text widthText = new Text(shell, SWT.BORDER);
+        GridData widthData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+        widthData.widthHint = 200; // 设置宽度
+        widthText.setLayoutData(widthData);
+        widthText.setFont(display.getSystemFont());
 
         // 添加按钮
         Button addButton = new Button(shell, SWT.PUSH);
@@ -81,32 +93,37 @@ public class RegisterFrame {
         addButton.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                String name = nameText.getText();
+                String height = heightText.getText();
+                String width = widthText.getText();
 
-                if (name.isEmpty()) {
+                if (height.isEmpty()||width.isEmpty()) {
                     MessageBox messageBox = new MessageBox(shell, SWT.OK);
                     messageBox.setMessage("请填写完整信息！");
                     messageBox.open();
                     return;
                 }
 
-                // 进行添加用户的逻辑
-                Player player = new Player();
-                player.setName(name);
-                Player result = null;
+                // 进行添加棋盘的逻辑
+                int Width = Integer.parseInt(width);
+                int Height = Integer.parseInt(height);
+                Border border = new Border();
+                border.setLength(Height);
+                border.setWidth(Width);
+
+                Border result = null;
                 try {
-                    result = playerDao.AddPlayer(player);
+                    result = borderDao.AddBorder(border);
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
                 if (result != null) {
                     MessageBox messageBox = new MessageBox(shell, SWT.OK);
-                    messageBox.setMessage("添加用户成功！");
+                    messageBox.setMessage("添加成功！");
                     messageBox.open();
                     shell.dispose(); // 关闭添加用户窗口
                 } else {
                     MessageBox messageBox = new MessageBox(shell, SWT.OK);
-                    messageBox.setMessage("添加用户失败，可能账号已存在！");
+                    messageBox.setMessage("添加失败，可能棋盘已存在！");
                     messageBox.open();
                 }
             }

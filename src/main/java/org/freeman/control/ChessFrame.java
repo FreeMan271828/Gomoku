@@ -15,6 +15,7 @@ import org.freeman.object.Cell;
 import org.freeman.object.Game;
 import org.freeman.object.Player;
 import org.freeman.service.*;
+
 import java.sql.SQLException;
 
 public class ChessFrame {
@@ -34,11 +35,9 @@ public class ChessFrame {
     private int borderHeight;
     private int borderWidth;
     private int[][] allChess;
-
     private int isSave;
 
     public ChessFrame(Display display, Shell shell, BeforeGameService beforeGameService, GameService gameService) {
-
         this.beforeGameService = beforeGameService;
         this.borderHeight = gameService.getCurrentGame().getBorder().getLength();
         this.borderWidth = gameService.getCurrentGame().getBorder().getWidth();
@@ -47,8 +46,8 @@ public class ChessFrame {
         this.shell = shell;
         this.isSave = 0;
         shell.setText("五子棋");
-        shell.setSize(1080, 850);
-        shell.setLayout(new FillLayout());
+        shell.setSize(1800, 1200); // 增大窗口尺寸
+
         allChess = new int[borderHeight][borderWidth];
 
         shell.addPaintListener(new PaintListener() {
@@ -88,40 +87,40 @@ public class ChessFrame {
 
     // 渲染棋盘
     private void drawGame(PaintEvent e) {
-        int cellSize = Math.min((800 - 150) / borderWidth, (775 - 125) / borderHeight); // 动态计算每个格子的大小
-        int xOffset = 150;
-        int yOffset = 125;
+        int cellSize = Math.min((1000 - 200) / borderWidth, (950 - 175) / borderHeight); // 动态计算每个格子的大小
+        int xOffset = 200; // 调整棋盘偏移量
+        int yOffset = 175; // 调整棋盘偏移量
 
         FontData fontData = new FontData("黑体", 50, SWT.BOLD);
         Font font = new Font(display, fontData);
         e.gc.setFont(font);
         e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-        e.gc.drawText("游戏信息:" + message, 70, 90);
+        e.gc.drawText("游戏信息: " + message, 100, 70); // 调整文本位置
 
-        fontData = new FontData("宋体", 10, SWT.NONE);
+        fontData = new FontData("宋体", 20, SWT.NONE); // 调整字体大小
         font = new Font(display, fontData);
         e.gc.setFont(font);
-        e.gc.drawText("黑方时间:" + blackMessage, 75, 813);
-        e.gc.drawText("白方时间:" + whiteMessage, 440, 813);
+        e.gc.drawText("黑方时间: " + blackMessage, 150, 1000); // 调整文本位置
+        e.gc.drawText("白方时间: " + whiteMessage, 550, 1000); // 调整文本位置
 
-        fontData = new FontData("黑体", 20, SWT.BOLD);
+        fontData = new FontData("黑体", 30, SWT.BOLD); // 调整按钮字体大小
         font = new Font(display, fontData);
         e.gc.setFont(font);
         e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-        e.gc.drawText("开始游戏", 910, 130);
-        e.gc.drawText("保存游戏", 910, 240);
-        e.gc.drawText("退出游戏", 910, 590);
-        e.gc.drawText("认输", 940, 470);
-        e.gc.drawText("关于", 940, 360);
+        e.gc.drawText("开始游戏", 1200, 200); // 调整按钮位置
+        e.gc.drawText("保存游戏", 1200, 350); // 调整按钮位置
+        e.gc.drawText("退出游戏", 1200, 750); // 调整按钮位置
+        e.gc.drawText("认输", 1230, 600); // 调整按钮位置
+        e.gc.drawText("关于", 1230, 450); // 调整按钮位置
         e.gc.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
-        e.gc.fillOval(900, 650, 150, 100);
-        e.gc.fillOval(880, 640, 50, 50);
-        e.gc.fillOval(1020, 640, 50, 50);
+        e.gc.fillOval(1180, 800, 200, 150); // 调整按钮形状和位置
+        e.gc.fillOval(1150, 790, 60, 60); // 调整按钮形状和位置
+        e.gc.fillOval(1310, 790, 60, 60); // 调整按钮形状和位置
         e.gc.setForeground(display.getSystemColor(SWT.COLOR_WHITE));
-        e.gc.drawText("游戏设置", 910, 710);
+        e.gc.drawText("游戏设置", 1200, 900); // 调整按钮位置
 
         e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-        e.gc.setFont(new Font(display, "黑体", 10, SWT.BOLD));
+        e.gc.setFont(new Font(display, "黑体", 15, SWT.BOLD)); // 调整字体大小
 
         // 绘制棋盘
         for (int i = 0; i <= borderWidth; i++) {
@@ -138,14 +137,13 @@ public class ChessFrame {
             for (int j = 0; j < borderHeight; j++) {
                 if (allChess[i][j] == 1) {
                     // 黑棋
-                    // 黑棋子
                     int tempx = xOffset + i * cellSize;
                     int tempy = yOffset + j * cellSize;
                     e.gc.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
                     e.gc.fillOval(tempx - cellSize / 2, tempy - cellSize / 2, cellSize, cellSize);
                 }
                 if (allChess[i][j] == 2) {
-                    // 白棋子
+                    // 白棋
                     int tempx = xOffset + i * cellSize;
                     int tempy = yOffset + j * cellSize;
                     e.gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
@@ -159,9 +157,9 @@ public class ChessFrame {
 
     // 处理鼠标点击
     private void handleMouseClick(MouseEvent e) throws SQLException {
-        int cellSize = Math.min((800 - 150) / borderWidth, (775 - 125) / borderHeight);
-        int xOffset = 150;
-        int yOffset = 125;
+        int cellSize = Math.min((1000 - 200) / borderWidth, (950 - 175) / borderHeight);
+        int xOffset = 200;
+        int yOffset = 175;
 
         if (canPlay) {
             int nx = e.x;
@@ -197,7 +195,7 @@ public class ChessFrame {
                             gameService.setWinner(gameService.getCurrentGame().getPlayer2());
                         }
                         MessageBox messageBox = new MessageBox(shell, SWT.OK);
-                        messageBox.setMessage("游戏结束" + (isBlack ? "白方" : "黑方") + "胜利!");
+                        messageBox.setMessage("游戏结束 " + (isBlack ? "白方" : "黑方") + " 胜利!");
                         messageBox.open();
                         canPlay = false;
                         isSaveBox();
@@ -211,7 +209,7 @@ public class ChessFrame {
             }
         }
         // 判断是否单击了开始游戏
-        if (e.x >= 875 && e.x <= 1060 && e.y >= 110 && e.y <= 170) {
+        if (e.x >= 1180 && e.x <= 1380 && e.y >= 200 && e.y <= 260) {
             isSaveBox();
             MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO);
             messageBox.setMessage("是否重新开始游戏？");
@@ -221,22 +219,20 @@ public class ChessFrame {
             }
         }
         // 判断是否单击了保存
-        if (e.x >= 900 && e.x <= 1050 && e.y >= 220 && e.y <= 270) {
+        if (e.x >= 1180 && e.x <= 1380 && e.y >= 350 && e.y <= 410) {
             isSaveBox();
             shell.dispose();
         }
         // 判断是否单击了退出游戏
-        if (e.x >= 900 && e.x <= 1050 && e.y >= 570 && e.y <= 620) {
-
+        if (e.x >= 1180 && e.x <= 1380 && e.y >= 750 && e.y <= 810) {
             isSaveBox();
-
             MessageBox messageBox = new MessageBox(shell, SWT.OK);
             messageBox.setMessage("欢迎下次再来!");
             messageBox.open();
             shell.dispose();
         }
         // 判断是否单击了认输
-        if (e.x >= 900 && e.x <= 1050 && e.y >= 450 && e.y <= 500) {
+        if (e.x >= 1180 && e.x <= 1380 && e.y >= 600 && e.y <= 660) {
             MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO);
             messageBox.setMessage("是否确定认输?");
             int result = messageBox.open();
@@ -254,7 +250,7 @@ public class ChessFrame {
             isSaveBox();
         }
         // 判断是否单击了关于
-        if (e.x >= 900 && e.x <= 1050 && e.y >= 340 && e.y <= 390) {
+        if (e.x >= 1180 && e.x <= 1380 && e.y >= 450 && e.y <= 510) {
             MessageBox messageBox = new MessageBox(shell, SWT.OK);
             messageBox.setMessage("五子棋游戏由 Gomoku 开发.");
             messageBox.open();
@@ -288,7 +284,6 @@ public class ChessFrame {
                 saveGame();
             }
         }
-
     }
 
     private void saveGame() throws SQLException {

@@ -67,6 +67,11 @@ public class BeforeGameService {
         this.allGames = games;
     }
 
+    public Player get_winner(Game game) throws SQLException {
+        Player player = winnerDao.GetWinner(game.getId());
+        return  player;
+    }
+
     //根据id获取玩家参与的所有的游戏信息,渲染玩家列表调用
     public void get_PlayersGames(List<Player> allPlayers, List<Game> allGames){
 

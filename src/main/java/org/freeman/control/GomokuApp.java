@@ -3,6 +3,7 @@ package org.freeman.control;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -13,6 +14,7 @@ import org.freeman.object.Border;
 import org.freeman.object.Player;
 import org.freeman.service.*;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -32,7 +34,7 @@ public class GomokuApp {
         display = new Display();
         shell = new Shell(display);
         shell.setText("五子棋游戏");
-        shell.setSize(1080, 850);
+        shell.setSize(1600, 1080);
         shell.setLayout(new GridLayout(1, false));
         // 设置背景颜色
         Color background = new Color(display, 240, 240, 240);
@@ -108,6 +110,17 @@ public class GomokuApp {
             }
         });
 
+        Button addBorderButton = new Button(shell,SWT.PUSH);
+        addBorderButton.setText("添加棋盘");
+
+        addBorderButton.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                new AddBorderFrame(display);
+            }
+        });
+
+
         Button backButton = new Button(shell, SWT.PUSH);
         backButton.setText("返回");
         backButton.addSelectionListener(new SelectionAdapter() {
@@ -124,11 +137,9 @@ public class GomokuApp {
     }
 
     //历史记录的查看代码
-    private void showHistoryScreen() {
+    private void showHistoryScreen() throws SQLException {
 
-        clearComponents();
-
-        // 历史记录查看代码在这里
+        new HistoryList(this.display,beforeGameService);
 
         shell.layout();
     }
@@ -205,11 +216,12 @@ public class GomokuApp {
 
     }
 
-    public String[] getAllBorderType(){
+    public String[] getAllBorderType() {
         beforeGameService.get_allBorders();
         return beforeGameService.getAllBorders().stream()
                 .map(border -> border.getLength() + "*" + border.getWidth())
                 .distinct()
+                .sorted(Comparator.comparingInt(String::length))
                 .toArray(String[]::new);
     }
 
@@ -265,7 +277,11 @@ public class GomokuApp {
         viewHistoryButton.setLayoutData(gridData);
         viewHistoryButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
-                showHistoryScreen();
+                try {
+                    showHistoryScreen();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
