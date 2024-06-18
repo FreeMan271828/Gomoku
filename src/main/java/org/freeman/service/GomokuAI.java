@@ -5,12 +5,13 @@ import java.util.List;
 
 public class GomokuAI {
 
-    private static final int BOARD_SIZE = 9;
+    private static int BOARD_SIZE;
     private static final int EMPTY = 0;
     private static final int AI = 1;
     private static final int HUMAN = 2;
 
-    public static int[] findBestMove(int[][] board) {
+    public static int[] findBestMove(int[][] board,int borderSize) {
+        BOARD_SIZE = borderSize;
         List<int[]> possibleMoves = getPossibleMoves(board);
         int[] bestMove = null;
         int maxScore = Integer.MIN_VALUE;
@@ -109,16 +110,12 @@ public class GomokuAI {
         for (int i = 1; i <= 4; i++) {
             int x = row + i * dx;
             int y = col + i * dy;
-            if (x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE) {
-                if (board[x][y] == AI) {
-                    aiCount++;
-                } else if (board[x][y] == HUMAN) {
-                    humanCount++;
-                } else {
-                    break;
-                }
-            } else {
+            if (x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE) {
                 break;
+            } else {
+                if (board[x][y] == AI) {aiCount++;}
+                else if (board[x][y] == HUMAN) {humanCount++;}
+                else {break;}
             }
         }
 
