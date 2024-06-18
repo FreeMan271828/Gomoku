@@ -215,7 +215,7 @@ public class ChessFrame {
             messageBox.setMessage("是否重新开始游戏？");
             int result = messageBox.open();
             if (result == SWT.YES) {
-                gameService.resetGame();
+                resetGame();  // 调用重置游戏方法
             }
         }
         // 判断是否单击了保存
@@ -257,7 +257,7 @@ public class ChessFrame {
         }
     }
 
-    private void reStart() {
+    private void resetGame() {
         for (int i = 0; i < borderWidth; i++) {
             for (int j = 0; j < borderHeight; j++) {
                 allChess[i][j] = 0;
@@ -280,7 +280,7 @@ public class ChessFrame {
             saveBox.setMessage("是否保存当前对局？");
             int result = saveBox.open();
             if (result == SWT.YES) {
-                isSave = 0;
+                isSave = 1;
                 saveGame();
             }
         }
