@@ -182,16 +182,16 @@ public class GomokuAI {
         return length;
     }
 
-    public static void main(String[] args) {
-        int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
-        // AI计算最佳落子点
-        board[0][4] = AI;
-        board[5][5] = HUMAN;
-        board[0][3] =AI;
-        board[5][6] = HUMAN;
-        board[0][2] = AI;
-        board[0][1] = HUMAN;
-        int[] bestMove = findBestMove(board);
-        System.out.println("AI 最佳落子点: (" + bestMove[0] + ", " + bestMove[1] + ")");
-    }
+//    public static void main(String[] args) {
+//        int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
+//        // AI计算最佳落子点
+//        board[0][4] = AI;
+//        board[5][5] = HUMAN;
+//        board[0][3] =AI;
+//        board[5][6] = HUMAN;
+//        board[0][2] = AI;
+//        board[0][1] = HUMAN;
+//        int[] bestMove = findBestMove(board);
+//        System.out.println("AI 最佳落子点: (" + bestMove[0] + ", " + bestMove[1] + ")");
+//    }
 }
