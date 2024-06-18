@@ -191,7 +191,7 @@ public class GomokuAI {
         board[5][6] = HUMAN;
         board[0][2] = AI;
         board[0][1] = HUMAN;
-        int[] bestMove = findBestMove(board);
+        int[] bestMove = findBestMove(board,15);
         System.out.println("AI 最佳落子点: (" + bestMove[0] + ", " + bestMove[1] + ")");
     }
 }
