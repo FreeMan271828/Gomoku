@@ -46,14 +46,14 @@ public class HistoryList {
 
         // 填充表格数据
         for (Game record : gameRecords) {
-
-//            Player winnerPlayer = beforeGameService.get_winner(record);
-
+            Player winnerPlayer = beforeGameService.get_winner(record);
             TableItem item = new TableItem(table, SWT.NONE);
             item.setText(0, record.getGmtCreated().toString());
             item.setText(1, record.getPlayer1().getName());
             item.setText(2, record.getPlayer2().getName());
-//            item.setText(3, winnerPlayer.getName());
+            if(winnerPlayer != null) {
+                item.setText(3, winnerPlayer.getName());
+            }
         }
 
         // 自动调整列宽

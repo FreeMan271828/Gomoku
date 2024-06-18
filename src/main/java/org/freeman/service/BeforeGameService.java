@@ -69,6 +69,7 @@ public class BeforeGameService {
 
     public Player get_winner(Game game) throws SQLException {
         Player player = winnerDao.GetWinner(game.getId());
+        if(player == null) return null;
         return  player;
     }
 

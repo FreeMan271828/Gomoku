@@ -56,6 +56,7 @@ public class WinnerDaoImpl implements WinnerDao {
             String playerId = rs.getString("player_id");
             players.add(playerDao.GetPlayer(UUID.fromString(playerId)));
         }
+        if(players.isEmpty()) return null;
         return players.getFirst();
     }
 
