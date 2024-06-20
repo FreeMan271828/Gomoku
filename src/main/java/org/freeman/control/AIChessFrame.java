@@ -193,7 +193,7 @@ public class AIChessFrame {
         }
         // 判断是否单击了开始游戏
         if (e.x >= 1180 && e.x <= 1380 && e.y >= 200 && e.y <= 260) {
-            isSaveBox();
+//            isSaveBox();
             MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO);
             messageBox.setMessage("是否重新开始游戏？");
             int result = messageBox.open();
