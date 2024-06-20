@@ -208,7 +208,7 @@ public class AIChessFrame {
         }
         // 判断是否单击了退出游戏
         if (e.x >= 1180 && e.x <= 1380 && e.y >= 750 && e.y <= 810) {
-            isSaveBox();
+//            isSaveBox();
             MessageBox messageBox = new MessageBox(shell, SWT.OK);
             messageBox.setMessage("欢迎下次再来!");
             messageBox.open();
