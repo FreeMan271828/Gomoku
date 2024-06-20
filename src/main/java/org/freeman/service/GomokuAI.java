@@ -59,11 +59,11 @@ public class GomokuAI {
 
         // 进攻评分
         if (aiLineLength >= 4) {
-            score += 10000;
+            score += 18990;
         } else if (aiLineLength == 3) {
-            score += 100;
+            score += 300;
         } else if (aiLineLength == 2) {
-            score += 10;
+            score += 30;
         }
 
         // 防守评分 - 增加防守权重
@@ -121,11 +121,11 @@ public class GomokuAI {
 
         // 计算得分
         if (aiCount >= 4) {
-            score += 10000;
+            score += 18000;
         } else if (aiCount == 3) {
-            score += 100;
+            score += 300;
         } else if (aiCount == 2) {
-            score += 10;
+            score += 30;
         }
 
         if (humanCount >= 4) {
