@@ -149,7 +149,7 @@ public class GomokuApp {
 
 
         //重新渲染一个棋盘，
-        new ChessFrame(display,shell,beforeGameService,gameService);
+        new AIChessFrame(display,shell,beforeGameService,gameService);
 //        Button backButton = new   Button(shell, SWT.PUSH);
 //        backButton.setText("返回主菜单");
 //        backButton.addSelectionListener(new SelectionAdapter() {
