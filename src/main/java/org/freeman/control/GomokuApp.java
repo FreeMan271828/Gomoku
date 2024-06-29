@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class GomokuApp {
+public class GomokuApp implements Runnable{
     private Display display;
     private Shell shell;
     private final BeforeGameService beforeGameService = new BeforeGameService();
@@ -31,7 +31,8 @@ public class GomokuApp {
 //        new GomokuApp().open();
 //    }
 
-    public void open() {
+    @Override
+    public void run() {
         display = new Display();
         shell = new Shell(display);
         shell.setText("五子棋游戏");

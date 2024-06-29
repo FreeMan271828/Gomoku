@@ -49,17 +49,6 @@ public class GameService {
         int[][] chessAll = new int[currentBorder.getWidth()][currentBorder.getLength()];
         this.allChess = chessAll;
     }
-    //落子功能
-//    public void putChess(int x,int y,boolean isBlack){
-//        if(isBlack){
-//            //黑子为1
-//            allChess[x][y] = 1;
-//        }else{
-//            //白子为2
-//            allChess[x][y] = 1;
-//        }
-//    }
-
     //悔棋，玩家可以在本方回合结束之前任意悔棋，在确认结束本回合后将无法悔棋
     public void regretChess(int x,int y){
         allChess[x][y] = 0;

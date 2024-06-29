@@ -1,0 +1,8 @@
+{
+  "ThreadPool": {
+    "corePoolSize": 8,
+    "maxPoolSize": 16,
+    "keepAliveTime": 1,
+    "keepAliveTimeUnit":"SECONDS"
+  }
+}
